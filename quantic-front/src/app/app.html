@@ -1,1 +1,9 @@
 <router-outlet />
+
+@if (modalService.visible()) {
+  <app-modal-error
+    [titulo]="modalService.titulo()"
+    [mensaje]="modalService.mensaje()"
+    (cerrar)="modalService.cerrar()"
+  />
+}

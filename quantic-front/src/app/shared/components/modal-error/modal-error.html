@@ -1,0 +1,20 @@
+<div class="fondo">
+  <div
+    class="modal tarjeta"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-titulo"
+    aria-describedby="modal-mensaje"
+  >
+    <span class="icono" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M12 6v7M12 17.5v.01" />
+      </svg>
+    </span>
+    <h2 id="modal-titulo">{{ titulo() }}</h2>
+    <p id="modal-mensaje">{{ mensaje() }}</p>
+    <button #botonCerrar type="button" class="boton boton-bloque" (click)="cerrar.emit()">
+      Entendido
+    </button>
+  </div>
+</div>

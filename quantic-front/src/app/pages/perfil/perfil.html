@@ -1,1 +1,53 @@
-<h1>Perfil</h1>
+@if (usuario(); as u) {
+  <div class="perfil">
+    <section class="tarjeta tarjeta-acento ficha">
+      <p class="etiqueta">Ficha del explorador</p>
+
+      <div class="planeta">
+        <!-- Anillo orbital decorativo, queda detrás de la foto -->
+        <svg class="orbita" viewBox="0 0 240 160" aria-hidden="true">
+          <ellipse cx="120" cy="80" rx="112" ry="38" fill="none" stroke="#F28C38" stroke-opacity="0.6" stroke-width="1.5" transform="rotate(-20 120 80)" />
+          <circle cx="199" cy="28" r="4.5" fill="#E8E6DF" />
+        </svg>
+        <div class="avatar">
+          @if (u.imagenPerfil) {
+            <img [src]="u.imagenPerfil" alt="Foto de perfil de {{ nombreCompleto() }}" />
+          } @else {
+            {{ nombreCompleto() | iniciales }}
+          }
+        </div>
+      </div>
+
+      <h1 class="nombre">{{ nombreCompleto() }}</h1>
+      <p class="usuario">&#64;{{ u.nombreUsuario }}</p>
+      <span class="insignia">{{ insignia() }}</span>
+
+      <dl class="datos">
+        <div>
+          <dt>Correo</dt>
+          <dd>{{ u.correo }}</dd>
+        </div>
+        <div>
+          <dt>Fecha de nacimiento</dt>
+          <dd>{{ u.fechaNacimiento | fechaLarga }}</dd>
+        </div>
+        <div>
+          <dt>Descripción</dt>
+          <dd>{{ u.descripcion }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="tarjeta publicaciones">
+      <p class="etiqueta">Bitácora</p>
+      <h2 class="subtitulo-panel">Últimas publicaciones</h2>
+      <p class="proximamente">Próximamente</p>
+    </section>
+  </div>
+} @else {
+  <section class="tarjeta sin-sesion">
+    <h1 class="subtitulo-panel">No hay una sesión iniciada</h1>
+    <p class="proximamente">Iniciá sesión para ver tu perfil.</p>
+    <a class="boton" routerLink="/login">Ir a iniciar sesión</a>
+  </section>
+}

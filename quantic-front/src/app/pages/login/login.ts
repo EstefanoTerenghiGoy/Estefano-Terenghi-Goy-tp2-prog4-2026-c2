@@ -49,7 +49,7 @@ export class Login {
     try {
       const { usuario, password } = this.form.getRawValue();
       const respuesta = await this.authService.login(usuario, password);
-      this.authService.guardarUsuario(respuesta.usuario);
+      this.authService.guardarSesion(respuesta.token, respuesta.usuario);
       await this.router.navigate(['/publicaciones']);
     } catch (error) {
       this.modalService.mostrarError(

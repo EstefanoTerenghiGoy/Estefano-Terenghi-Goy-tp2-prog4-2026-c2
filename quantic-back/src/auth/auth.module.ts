@@ -15,7 +15,7 @@ import { AuthService } from './auth.service.js';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.getOrThrow<string>('JWT_SECRET'), // si falta, la app no arranca
-        signOptions: { expiresIn: '15m' },
+        signOptions: { expiresIn: '22m' },
       }),
     }),
   ],

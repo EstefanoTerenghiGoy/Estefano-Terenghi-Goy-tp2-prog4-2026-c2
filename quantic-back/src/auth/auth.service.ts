@@ -91,7 +91,6 @@ export class AuthService {
     return this.respuestaConToken(usuario);
   }
 
-  // Respuesta de registro y login: el token (15 min, ver AuthModule) y el usuario sin contraseña
   private async respuestaConToken(
     usuario: HydratedDocument<Usuario>,
   ) {

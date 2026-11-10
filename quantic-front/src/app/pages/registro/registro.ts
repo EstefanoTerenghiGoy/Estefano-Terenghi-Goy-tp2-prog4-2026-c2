@@ -100,7 +100,7 @@ export class Registro implements OnDestroy {
         datos.append('imagen', archivo);
       }
       const respuesta = await this.authService.registro(datos);
-      this.authService.guardarUsuario(respuesta.usuario);
+      this.authService.guardarSesion(respuesta.token, respuesta.usuario);
       await this.router.navigate(['/publicaciones']);
     } catch (error) {
       this.modalService.mostrarError(

@@ -1,0 +1,31 @@
+/* Se ubica sobre el borde derecho del input (el contenedor es .input-password) */
+:host {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+
+button:hover {
+  color: var(--texto);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--acento);
+}

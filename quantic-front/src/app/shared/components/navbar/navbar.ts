@@ -2,10 +2,11 @@ import { Component, HostListener, computed, inject, signal } from '@angular/core
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ClickOutside } from '../../directives/click-outside';
+import { Iniciales } from '../../pipes/iniciales';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, ClickOutside],
+  imports: [RouterLink, RouterLinkActive, ClickOutside, Iniciales],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -16,10 +17,10 @@ export class Navbar {
   usuario = signal(this.authService.obtenerUsuario());
   menuAbierto = signal(false);
 
-  // Iniciales para la burbuja cuando el usuario no tiene imagen
-  iniciales = computed(() => {
+  // Para las iniciales de la burbuja cuando el usuario no tiene imagen
+  nombreCompleto = computed(() => {
     const u = this.usuario();
-    return u ? (u.nombre.charAt(0) + u.apellido.charAt(0)).toUpperCase() : '?';
+    return u ? `${u.nombre} ${u.apellido}` : '';
   });
 
   alternarMenu(): void {

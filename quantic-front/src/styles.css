@@ -111,8 +111,8 @@ a {
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 .campo label {
@@ -132,6 +132,15 @@ a {
   font-size: 16px;
 }
 
+/* Input de contraseña con el ojito a la derecha */
+.input-password {
+  position: relative;
+}
+
+.input-password .input {
+  padding-right: 52px;
+}
+
 textarea.input {
   padding: 12px 16px;
   resize: vertical;
@@ -149,6 +158,36 @@ textarea.input {
 
 .input.invalido {
   border-color: var(--error);
+}
+
+/* Textos de las pantallas de login y registro */
+.titulo-auth {
+  margin-top: 8px;
+  font-size: 34px;
+}
+
+.subtitulo {
+  margin: 10px 0 32px;
+  color: var(--texto-suave);
+}
+
+.pie-auth {
+  margin: 24px 0 0;
+  text-align: center;
+}
+
+@media (max-height: 830px) {
+  .titulo-auth {
+    font-size: 28px;
+  }
+
+  .subtitulo {
+    margin: 4px 0 14px;
+  }
+
+  .pie-auth {
+    margin-top: 14px;
+  }
 }
 
 .ayuda,

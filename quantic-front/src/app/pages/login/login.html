@@ -1,1 +1,65 @@
-<h1>Login</h1>
+<app-pantalla-auth>
+  <p class="etiqueta">Códigos de lanzamiento</p>
+  <h1 class="titulo-auth">Iniciar sesión</h1>
+  <p class="subtitulo">Ingresá con tu nombre de usuario o tu correo.</p>
+
+  <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+    <div class="campo">
+      <label for="usuario">Usuario o correo</label>
+      <input
+        id="usuario"
+        class="input"
+        formControlName="usuario"
+        autocomplete="username"
+        placeholder="usuario.dev o usuario@correo.com"
+        [class.invalido]="invalido('usuario')"
+      />
+      @if (invalido('usuario')) {
+        <p class="error-campo">Ingresá tu usuario o tu correo.</p>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="password">Contraseña</label>
+      <div class="input-password">
+        <input
+          id="password"
+          [type]="verPassword() ? 'text' : 'password'"
+          class="input"
+          formControlName="password"
+          autocomplete="current-password"
+          [class.invalido]="invalido('password')"
+        />
+        <app-boton-ojo [visible]="verPassword()" (alternar)="verPassword.set(!verPassword())" />
+      </div>
+      @if (invalido('password')) {
+        <p class="error-campo">
+          @if (form.controls.password.hasError('required')) {
+            Ingresá tu contraseña.
+          } @else {
+            Mínimo 8 caracteres, una mayúscula y un número.
+          }
+        </p>
+      } @else {
+        <p class="ayuda">Mínimo 8 caracteres, una mayúscula y un número.</p>
+      }
+    </div>
+
+    <button type="submit" class="boton boton-bloque" [disabled]="form.invalid || enviando()">
+      Ingresar
+    </button>
+  </form>
+
+  <p class="pie-auth">¿No tenés cuenta? <a routerLink="/registro">Registrate</a></p>
+
+  @if (usuariosRapidos.length > 0) {
+    <div class="rapido">
+      <span class="rapido-etiqueta">Inicio rápido</span>
+      @for (cuenta of usuariosRapidos; track cuenta.etiqueta) {
+        <button type="button" class="boton boton-secundario boton-chico" [disabled]="enviando()" (click)="inicioRapido(cuenta)">
+          {{ cuenta.etiqueta }}
+        </button>
+      }
+    </div>
+  }
+</app-pantalla-auth>

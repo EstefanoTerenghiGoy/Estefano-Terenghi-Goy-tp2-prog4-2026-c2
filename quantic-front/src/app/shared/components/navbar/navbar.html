@@ -34,7 +34,7 @@
       @if (usuario()?.imagenPerfil) {
         <img [src]="usuario()!.imagenPerfil" alt="" />
       } @else {
-        {{ iniciales() }}
+        {{ nombreCompleto() | iniciales }}
       }
     </button>
 

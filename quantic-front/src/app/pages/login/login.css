@@ -1,0 +1,39 @@
+/* Inicio rápido: abajo a la derecha de la tarjeta */
+.rapido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borde);
+}
+
+.rapido-etiqueta {
+  margin-right: auto;
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+
+.boton-chico {
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+/* Ventanas bajas: menos aire entre elementos para evitar el scroll */
+@media (max-height: 830px) {
+  .campo {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .rapido {
+    margin-top: 12px;
+    padding-top: 0;
+    border-top: 0;
+  }
+}

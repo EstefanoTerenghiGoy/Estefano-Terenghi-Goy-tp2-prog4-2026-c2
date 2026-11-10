@@ -1,0 +1,89 @@
+.imagen-perfil {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  overflow: hidden;
+  border: 2px solid var(--acento);
+  border-radius: 50%;
+  background: #1a2040;
+  color: var(--texto);
+  font-size: 28px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imagen-datos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.etiqueta-campo {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.boton-archivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px dashed var(--acento);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--acento);
+  font-family: var(--fuente-texto);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.boton-archivo:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.campo-fecha {
+  max-width: 280px;
+}
+
+.pie-descripcion {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.contador {
+  margin-left: auto;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+.contador.excedido {
+  color: var(--error);
+}
+
+/* Dos columnas desde tablet; en celular cada campo ocupa todo el ancho */
+@media (min-width: 600px) {
+  .fila {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+  }
+}

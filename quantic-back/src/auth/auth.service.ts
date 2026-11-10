@@ -1,11 +1,13 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { HydratedDocument, Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuarios/schemas/usuario.schema.js';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service.js';
@@ -17,6 +19,7 @@ export class AuthService {
   constructor(
     @InjectModel(Usuario.name) private readonly usuarioModel: Model<Usuario>,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async registro(dto: RegistroDto, archivo?: Express.Multer.File) {
@@ -53,7 +56,7 @@ export class AuthService {
         imagenPerfil,
         perfil: 'usuario', // siempre "usuario", sin importar lo que mande el cliente por seguridad
       });
-      return { usuario: this.sinPassword(usuario) };
+      return await this.respuestaConToken(usuario);
     } catch (error: any) {
       // 11000 = fallo en el unique index (dos registros simultáneos con los mismos datos)
       if (error?.code === 11000) {
@@ -79,7 +82,25 @@ export class AuthService {
     if (!usuario || !(await bcrypt.compare(dto.password, usuario.password))) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
-    return { usuario: this.sinPassword(usuario) };
+    // Se chequea después de la contraseña para no revelar el estado de la cuenta a quien no la conoce
+    if (!usuario.activo) {
+      throw new ForbiddenException(
+        'Tu cuenta está deshabilitada. Contactá a un administrador.',
+      );
+    }
+    return this.respuestaConToken(usuario);
+  }
+
+  // Respuesta de registro y login: el token (15 min, ver AuthModule) y el usuario sin contraseña
+  private async respuestaConToken(
+    usuario: HydratedDocument<Usuario>,
+  ) {
+    const token = await this.jwtService.signAsync({
+      sub: usuario.id,
+      usuario: usuario.nombreUsuario,
+      perfil: usuario.perfil,
+    });
+    return { token, usuario: this.sinPassword(usuario) };
   }
 
   private sinPassword(usuario: { toObject(): Record<string, any> }) {

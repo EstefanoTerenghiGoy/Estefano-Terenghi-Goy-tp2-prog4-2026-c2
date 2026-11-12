@@ -1,0 +1,35 @@
+<nav class="paginacion" aria-label="Paginación">
+  <div class="botones">
+    <button
+      type="button"
+      class="control"
+      [disabled]="pagina() <= 1"
+      (click)="elegir(pagina() - 1)"
+    >
+      ← ANTERIOR
+    </button>
+
+    @for (numero of numeros(); track numero) {
+      <button
+        type="button"
+        class="numero"
+        [class.activa]="numero === pagina()"
+        [attr.aria-current]="numero === pagina() ? 'page' : null"
+        [attr.aria-label]="'Página ' + numero"
+        (click)="elegir(numero)"
+      >
+        {{ numero }}
+      </button>
+    }
+
+    <button
+      type="button"
+      class="control siguiente"
+      [disabled]="pagina() >= totalPaginas()"
+      (click)="elegir(pagina() + 1)"
+    >
+      SIGUIENTE →
+    </button>
+  </div>
+  <p class="estado">PÁGINA {{ pagina() }} DE {{ totalPaginas() }}</p>
+</nav>

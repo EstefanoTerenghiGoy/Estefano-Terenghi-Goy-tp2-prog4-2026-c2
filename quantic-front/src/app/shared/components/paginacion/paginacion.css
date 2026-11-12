@@ -1,0 +1,68 @@
+.paginacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto);
+  font-family: var(--fuente-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 3px;
+}
+
+.control {
+  padding: 0 18px;
+}
+
+/* "Siguiente" resaltado, como en el diseño */
+.siguiente {
+  border-color: rgba(242, 140, 56, 0.6);
+  color: #ffb27a;
+}
+
+.numero:hover:not(.activa),
+.control:hover:not(:disabled) {
+  border-color: var(--acento);
+}
+
+.numero.activa {
+  border-color: var(--acento);
+  background: var(--acento);
+  color: #1a1206;
+  font-weight: 700;
+  cursor: default;
+}
+
+button:disabled {
+  color: #5c6278;
+  cursor: not-allowed;
+}
+
+.estado {
+  margin: 0;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--texto-suave);
+}

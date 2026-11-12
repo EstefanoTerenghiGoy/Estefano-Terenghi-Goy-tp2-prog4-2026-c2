@@ -1,0 +1,144 @@
+:host {
+  display: block;
+}
+
+.publicacion {
+  padding: 20px;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Foto con doble aro, como en el diseño */
+.avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border: 2px solid var(--acento);
+  border-radius: 50%;
+  background: #1a2040;
+  box-shadow: 0 0 0 4px rgba(242, 140, 56, 0.18);
+  font-size: 16px;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.autor {
+  min-width: 0; /* deja que el texto largo se corte en vez de empujar el código */
+  flex: 1;
+}
+
+.nombre {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.datos {
+  margin: 2px 0 0;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--texto-suave);
+  overflow-wrap: anywhere;
+}
+
+.tiempo {
+  white-space: nowrap; /* "hace 5 min" no se parte en dos renglones */
+}
+
+.codigo {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border: 1px solid rgba(242, 140, 56, 0.45);
+  border-radius: 999px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--acento);
+}
+
+.titulo {
+  margin: 20px 0 10px;
+  font-size: 24px;
+  overflow-wrap: anywhere;
+}
+
+.descripcion {
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.imagen {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  margin-top: 18px;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: var(--fondo);
+  object-fit: cover;
+}
+
+.pie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borde);
+}
+
+.dato {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  font-family: var(--fuente-mono);
+  font-size: 14px;
+  color: var(--texto);
+}
+
+/* Naranja cuando el usuario actual ya dio me gusta */
+.dato-me-gusta.mio {
+  border-color: var(--acento);
+  background: rgba(242, 140, 56, 0.14);
+  color: #ffb27a;
+}
+
+.dato-comentarios {
+  border-color: var(--violeta);
+  color: #a994f5;
+}
+
+@media (max-width: 480px) {
+  .titulo {
+    font-size: 21px;
+  }
+
+  /* Pastillas más compactas para que los dos datos entren en una fila */
+  .pie {
+    gap: 8px;
+  }
+
+  .dato {
+    gap: 6px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+}

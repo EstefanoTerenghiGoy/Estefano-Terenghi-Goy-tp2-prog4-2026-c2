@@ -1,6 +1,59 @@
-<p class="etiqueta">Registro de la nave</p>
-<h1 class="titulo-pagina">Entradas recientes</h1>
+<div class="columna">
+  <header class="encabezado" #inicioLista>
+    <div>
+      <p class="etiqueta">Registro de la nave</p>
+      <h1 class="titulo-pagina">Entradas recientes</h1>
+    </div>
 
-<section class="tarjeta">
-  <p class="proximamente">Próximamente: acá van a aparecer las publicaciones.</p>
-</section>
+    <div class="orden" role="group" aria-label="Ordenar entradas por">
+      <button
+        type="button"
+        class="opcion"
+        [class.activa]="orden() === 'fecha'"
+        [attr.aria-pressed]="orden() === 'fecha'"
+        (click)="cambiarOrden('fecha')"
+      >
+        FECHA
+      </button>
+      <button
+        type="button"
+        class="opcion"
+        [class.activa]="orden() === 'meGusta'"
+        [attr.aria-pressed]="orden() === 'meGusta'"
+        (click)="cambiarOrden('meGusta')"
+      >
+        ME GUSTA
+      </button>
+    </div>
+  </header>
+
+  @if (cargando()) {
+    <p class="estado" role="status">
+      <span class="rueda" aria-hidden="true"></span>
+      Cargando entradas…
+    </p>
+  } @else if (conError()) {
+    <section class="tarjeta estado-tarjeta">
+      <p>No pudimos cargar las entradas.</p>
+      <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+    </section>
+  } @else if (publicaciones().length === 0) {
+    <section class="tarjeta estado-tarjeta">
+      <p>Todavía no hay entradas</p>
+    </section>
+  } @else {
+    <div class="lista">
+      @for (publicacion of publicaciones(); track publicacion._id) {
+        <app-publicacion [publicacion]="publicacion" />
+      }
+    </div>
+
+    @if (totalPaginas() > 1) {
+      <app-paginacion
+        [pagina]="pagina()"
+        [totalPaginas]="totalPaginas()"
+        (cambiar)="cambiarPagina($event)"
+      />
+    }
+  }
+</div>

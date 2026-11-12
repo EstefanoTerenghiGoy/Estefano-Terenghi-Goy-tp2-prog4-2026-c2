@@ -1,0 +1,102 @@
+/* El ancho de la columna deja lugar al panel lateral que se suma más adelante */
+.columna {
+  max-width: 760px;
+}
+
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 24px;
+  scroll-margin-top: 90px; /* para que la barra fija no tape el título al subir */
+}
+
+.encabezado .titulo-pagina {
+  margin-bottom: 0;
+}
+
+.orden {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.opcion {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-suave);
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.opcion:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 2px;
+}
+
+.opcion.activa {
+  background: var(--acento);
+  color: #1a1206;
+  font-weight: 700;
+  cursor: default;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 48px 0;
+  font-family: var(--fuente-mono);
+  color: var(--texto-suave);
+}
+
+.rueda {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--borde);
+  border-top-color: var(--acento);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rueda {
+    animation-duration: 3s;
+  }
+}
+
+.estado-tarjeta {
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.estado-tarjeta p {
+  margin: 0 0 16px;
+}
+
+.estado-tarjeta p:last-child {
+  margin-bottom: 0;
+}

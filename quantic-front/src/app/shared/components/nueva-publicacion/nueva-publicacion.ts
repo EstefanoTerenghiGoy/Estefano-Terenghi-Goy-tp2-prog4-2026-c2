@@ -2,7 +2,7 @@ import { Component, OnDestroy, inject, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ModalService } from '../../../core/services/modal.service';
 import { PublicacionesService } from '../../../core/services/publicaciones.service';
-import { mensajeDeError } from '../../../core/utils/mensaje-error';
+import { esSesionVencida, mensajeDeError } from '../../../core/utils/mensaje-error';
 
 const MAX_IMAGEN = 5 * 1024 * 1024; // 5 MB
 const MAX_TITULO = 100;
@@ -95,10 +95,12 @@ export class NuevaPublicacion implements OnDestroy {
       this.quitarImagen(input);
       this.creada.emit();
     } catch (error) {
-      this.modalService.mostrarError(
-        'No se pudo registrar la entrada',
-        mensajeDeError(error, 'Ocurrió un error inesperado. Probá de nuevo.'),
-      );
+      if (!esSesionVencida(error)) {
+        this.modalService.mostrarError(
+          'No se pudo registrar la entrada',
+          mensajeDeError(error, 'Ocurrió un error inesperado. Probá de nuevo.'),
+        );
+      }
     } finally {
       this.enviando.set(false);
     }

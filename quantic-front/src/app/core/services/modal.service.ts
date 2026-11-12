@@ -7,7 +7,6 @@ export class ModalService {
   titulo = signal('');
   mensaje = signal('');
 
-  // Resuelve la promesa de confirmar() mientras la confirmación está abierta
   private resolverConfirmacion: ((acepto: boolean) => void) | null = null;
 
   mostrarError(titulo: string, mensaje: string): void {
@@ -18,7 +17,6 @@ export class ModalService {
     this.visible.set(true);
   }
 
-  // Devuelve true si el usuario aprieta "Eliminar" y false si cancela (botón o Esc)
   confirmar(titulo: string, mensaje: string): Promise<boolean> {
     this.resolver(false);
     this.tipo.set('confirmacion');

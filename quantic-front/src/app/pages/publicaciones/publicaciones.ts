@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { ModalService } from '../../core/services/modal.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
-import { mensajeDeError } from '../../core/utils/mensaje-error';
+import { esSesionVencida, mensajeDeError } from '../../core/utils/mensaje-error';
 import { NuevaPublicacion } from '../../shared/components/nueva-publicacion/nueva-publicacion';
 import { Paginacion } from '../../shared/components/paginacion/paginacion';
 import { Publicacion } from '../../shared/components/publicacion/publicacion';
@@ -139,10 +139,12 @@ export class Publicaciones implements OnInit {
         return;
       }
       this.conError.set(true);
-      this.modalService.mostrarError(
-        'No se pudieron cargar las entradas',
-        mensajeDeError(error, 'Ocurrió un error inesperado. Probá de nuevo.'),
-      );
+      if (!esSesionVencida(error)) {
+        this.modalService.mostrarError(
+          'No se pudieron cargar las entradas',
+          mensajeDeError(error, 'Ocurrió un error inesperado. Probá de nuevo.'),
+        );
+      }
     } finally {
       if (pedido === this.ultimoPedido) {
         this.cargando.set(false);
@@ -155,6 +157,9 @@ export class Publicaciones implements OnInit {
   }
 
   private mostrarErrorDeAccion(titulo: string, error: unknown): void {
+    if (esSesionVencida(error)) {
+      return;
+    }
     this.modalService.mostrarError(
       titulo,
       mensajeDeError(error, 'Ocurrió un error inesperado. Probá de nuevo.'),

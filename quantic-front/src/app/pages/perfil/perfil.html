@@ -38,10 +38,81 @@
       </dl>
     </section>
 
-    <section class="tarjeta publicaciones">
-      <p class="etiqueta">Bitácora</p>
-      <h2 class="subtitulo-panel">Últimas publicaciones</h2>
-      <p class="proximamente">Próximamente</p>
+    <section class="entradas" aria-labelledby="titulo-entradas">
+      <p class="etiqueta">Últimas 3 entradas</p>
+      <h2 id="titulo-entradas" class="titulo-entradas">Mis publicaciones</h2>
+
+      @if (cargando()) {
+        <p class="estado" role="status">
+          <span class="rueda" aria-hidden="true"></span>
+          Cargando tus entradas…
+        </p>
+      } @else if (conError()) {
+        <div class="tarjeta estado-tarjeta">
+          <p>No pudimos cargar tus entradas.</p>
+          <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+        </div>
+      } @else if (entradas().length === 0) {
+        <div class="tarjeta estado-tarjeta">
+          <p>Todavía no publicaste nada</p>
+        </div>
+      } @else {
+        <div class="lista">
+          @for (entrada of entradas(); track entrada.publicacion._id) {
+            <article class="tarjeta entrada">
+              <header class="cabecera-entrada">
+                <span class="tiempo">{{ entrada.publicacion.createdAt | tiempoRelativo }}</span>
+                <span class="codigo">LOG-{{ entrada.publicacion._id.slice(-4).toUpperCase() }}</span>
+              </header>
+
+              <h3 class="titulo">{{ entrada.publicacion.titulo }}</h3>
+              <p class="descripcion">{{ entrada.publicacion.descripcion }}</p>
+
+              @if (entrada.publicacion.imagenUrl) {
+                <img
+                  class="imagen"
+                  [src]="entrada.publicacion.imagenUrl"
+                  alt="Imagen de la publicación «{{ entrada.publicacion.titulo }}»"
+                  loading="lazy"
+                />
+              }
+
+              <!-- Solo informativo: en el perfil no se da me gusta -->
+              <p class="me-gusta">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <rect x="7" y="2" width="10" height="13" rx="4" fill="#E8743A" />
+                  <rect x="11" y="15" width="2" height="7" rx="1" fill="#E8E6DF" />
+                </svg>
+                {{ entrada.publicacion.cantidadMeGusta }}
+                {{ entrada.publicacion.cantidadMeGusta === 1 ? 'tostado' : 'tostados' }}
+              </p>
+
+              <div class="transmisiones">
+                @if (entrada.comentarios.total === 0) {
+                  <p class="encabezado-transmisiones sin">Sin transmisiones todavía</p>
+                } @else {
+                  <p class="encabezado-transmisiones">
+                    Transmisiones · {{ entrada.comentarios.total }}
+                  </p>
+                  <ul class="comentarios">
+                    @for (comentario of entrada.comentarios.datos; track comentario._id) {
+                      <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                          <path d="M12 12c0-1 1-1.6 1.8-1.2 1.3.6 1.2 2.6-.2 3.4-2 1.1-4.6-.2-4.9-2.6C8.4 8.7 10.4 6 13.4 6.1c3.4.1 5.6 3.3 4.9 6.5" />
+                        </svg>
+                        <span class="texto-comentario">
+                          <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong>
+                          · {{ comentario.mensaje }}
+                        </span>
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      }
     </section>
   </div>
 } @else {

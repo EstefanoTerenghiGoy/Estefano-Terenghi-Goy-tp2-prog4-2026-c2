@@ -19,16 +19,17 @@ export class PublicacionesService {
     orden: OrdenPublicaciones;
     offset: number;
     limit: number;
+    usuarioId?: string; // si se pasa, solo las publicaciones de ese usuario
   }): Promise<RespuestaPublicaciones> {
-    return firstValueFrom(
-      this.http.get<RespuestaPublicaciones>(this.url, {
-        params: {
-          orden: opciones.orden,
-          offset: opciones.offset,
-          limit: opciones.limit,
-        },
-      }),
-    );
+    const params: Record<string, string | number> = {
+      orden: opciones.orden,
+      offset: opciones.offset,
+      limit: opciones.limit,
+    };
+    if (opciones.usuarioId) {
+      params['usuarioId'] = opciones.usuarioId;
+    }
+    return firstValueFrom(this.http.get<RespuestaPublicaciones>(this.url, { params }));
   }
 
   // FormData con titulo, descripcion y (opcional) el archivo en el campo "imagen"

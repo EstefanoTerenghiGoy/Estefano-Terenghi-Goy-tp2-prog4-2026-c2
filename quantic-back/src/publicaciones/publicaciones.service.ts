@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PipelineStage, Types } from 'mongoose';
 import { Publicacion } from './schemas/publicacion.schema.js';
@@ -7,6 +12,8 @@ import { Usuario } from '../usuarios/schemas/usuario.schema.js';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service.js';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto.js';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto.js';
+import { ListarComentariosDto } from './dto/listar-comentarios.dto.js';
+import { PayloadToken } from '../auth/auth.guard.js';
 
 @Injectable()
 export class PublicacionesService {
@@ -47,7 +54,6 @@ export class PublicacionesService {
       filtro['autor'] = new Types.ObjectId(usuarioId);
     }
 
-    // Con "meGusta" se desempata por fecha; _id asegura un orden estable al paginar
     const sort: Record<string, 1 | -1> =
       orden === 'meGusta'
         ? { cantidadMeGusta: -1, createdAt: -1, _id: -1 }
@@ -60,7 +66,105 @@ export class PublicacionesService {
     return { datos, total, offset, limit };
   }
 
-  // Aggregate común a crear y listar: devuelve las publicaciones con el formato final
+  async obtener(id: string, usuarioActualId: string) {
+    const [publicacion] = await this.armarListado(
+      { _id: new Types.ObjectId(id), eliminada: false },
+      { _id: 1 },
+      0,
+      1,
+      usuarioActualId,
+    );
+    if (!publicacion) {
+      throw new NotFoundException('La publicación no existe');
+    }
+    return publicacion;
+  }
+
+  async eliminar(id: string, usuario: PayloadToken) {
+    const publicacion = await this.publicacionModel.findOne({ _id: id, eliminada: false });
+    if (!publicacion) {
+      throw new NotFoundException('La publicación no existe');
+    }
+    const esAutor = publicacion.autor.toString() === usuario.sub;
+    if (!esAutor && usuario.perfil !== 'administrador') {
+      throw new ForbiddenException('No tenés permiso para eliminar esta publicación');
+    }
+    await this.publicacionModel.updateOne({ _id: id }, { eliminada: true });
+    return { mensaje: 'Publicación eliminada correctamente' };
+  }
+
+  async darMeGusta(id: string, usuarioId: string) {
+    const uid = new Types.ObjectId(usuarioId);
+    const resultado = await this.publicacionModel.updateOne(
+      { _id: id, eliminada: false, meGusta: { $ne: uid } },
+      { $addToSet: { meGusta: uid } },
+    );
+    if (resultado.modifiedCount === 0) {
+      await this.fallarMeGusta(id, 'Ya le diste me gusta a esta publicación');
+    }
+    return this.estadoMeGusta(id, uid);
+  }
+
+  async quitarMeGusta(id: string, usuarioId: string) {
+    const uid = new Types.ObjectId(usuarioId);
+    const resultado = await this.publicacionModel.updateOne(
+      { _id: id, eliminada: false, meGusta: uid },
+      { $pull: { meGusta: uid } },
+    );
+    if (resultado.modifiedCount === 0) {
+      await this.fallarMeGusta(id, 'Todavía no le diste me gusta a esta publicación');
+    }
+    return this.estadoMeGusta(id, uid);
+  }
+
+  async listarComentarios(id: string, { offset, limit }: ListarComentariosDto) {
+    const publicacionId = new Types.ObjectId(id);
+    if (!(await this.publicacionModel.exists({ _id: publicacionId, eliminada: false }))) {
+      throw new NotFoundException('La publicación no existe');
+    }
+
+    const [datos, total] = await Promise.all([
+      this.comentarioModel.aggregate([
+        { $match: { publicacion: publicacionId } },
+        { $sort: { createdAt: -1, _id: -1 } },
+        { $skip: offset },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: this.usuarioModel.collection.name,
+            localField: 'autor',
+            foreignField: '_id',
+            pipeline: [
+              { $project: { nombre: 1, apellido: 1, nombreUsuario: 1, imagenPerfil: 1 } },
+            ],
+            as: 'autor',
+          },
+        },
+        { $unwind: '$autor' },
+        { $project: { mensaje: 1, createdAt: 1, modificado: 1, autor: 1 } },
+      ]),
+      this.comentarioModel.countDocuments({ publicacion: publicacionId }),
+    ]);
+    return { datos, total, offset, limit };
+  }
+
+  // El update no modificó nada: o la publicación no existe (404) o el me gusta ya estaba así (409)
+  private async fallarMeGusta(id: string, mensajeConflicto: string): Promise<never> {
+    if (!(await this.publicacionModel.exists({ _id: id, eliminada: false }))) {
+      throw new NotFoundException('La publicación no existe');
+    }
+    throw new ConflictException(mensajeConflicto);
+  }
+
+  private async estadoMeGusta(id: string, uid: Types.ObjectId) {
+    const publicacion = await this.publicacionModel.findById(id).select('meGusta').lean();
+    const meGusta = publicacion?.meGusta ?? [];
+    return {
+      cantidadMeGusta: meGusta.length,
+      meGustaMio: meGusta.some((x) => x.equals(uid)),
+    };
+  }
+
   private armarListado(
     filtro: Record<string, unknown>,
     sort: Record<string, 1 | -1>,
@@ -75,7 +179,6 @@ export class PublicacionesService {
       { $skip: offset },
       { $limit: limit },
       {
-        // Del autor solo se traen los campos públicos (nunca la contraseña)
         $lookup: {
           from: this.usuarioModel.collection.name,
           localField: 'autor',

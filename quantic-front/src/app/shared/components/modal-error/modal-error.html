@@ -13,8 +13,20 @@
     </span>
     <h2 id="modal-titulo">{{ titulo() }}</h2>
     <p id="modal-mensaje">{{ mensaje() }}</p>
-    <button #botonCerrar type="button" class="boton boton-bloque" (click)="cerrar.emit()">
-      Entendido
-    </button>
+    @if (tipo() === 'confirmacion') {
+      <!-- El foco empieza en "Cancelar" para no borrar algo por apretar Enter sin querer -->
+      <div class="acciones">
+        <button #botonCerrar type="button" class="boton boton-secundario" (click)="cerrar.emit()">
+          Cancelar
+        </button>
+        <button type="button" class="boton boton-peligro" (click)="confirmar.emit()">
+          Eliminar
+        </button>
+      </div>
+    } @else {
+      <button #botonCerrar type="button" class="boton boton-bloque" (click)="cerrar.emit()">
+        Entendido
+      </button>
+    }
   </div>
 </div>

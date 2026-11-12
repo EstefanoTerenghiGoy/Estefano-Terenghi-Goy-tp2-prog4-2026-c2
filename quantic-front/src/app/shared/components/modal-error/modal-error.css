@@ -36,4 +36,26 @@ h2 {
 
 p {
   margin: 12px 0 24px;
+  overflow-wrap: anywhere;
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+}
+
+.acciones .boton {
+  flex: 1;
+  padding: 0 12px;
+}
+
+/* Botón rojo de la confirmación para eliminar */
+.boton-peligro {
+  border-color: var(--error);
+  background: var(--error);
+  color: #fff;
+}
+
+.boton-peligro:focus-visible {
+  outline-color: var(--texto);
 }

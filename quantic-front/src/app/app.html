@@ -4,6 +4,8 @@
   <app-modal-error
     [titulo]="modalService.titulo()"
     [mensaje]="modalService.mensaje()"
+    [tipo]="modalService.tipo()"
     (cerrar)="modalService.cerrar()"
+    (confirmar)="modalService.aceptar()"
   />
 }

@@ -1,6 +1,5 @@
 export type OrdenPublicaciones = 'fecha' | 'meGusta';
 
-// Datos públicos del autor (el back nunca manda correo ni contraseña)
 export interface AutorPublicacion {
   _id: string;
   nombre: string;
@@ -19,6 +18,12 @@ export interface Publicacion {
   cantidadMeGusta: number;
   meGustaMio: boolean;
   cantidadComentarios: number;
+}
+
+// Respuesta de dar / quitar me gusta
+export interface EstadoMeGusta {
+  cantidadMeGusta: number;
+  meGustaMio: boolean;
 }
 
 export interface RespuestaPublicaciones {

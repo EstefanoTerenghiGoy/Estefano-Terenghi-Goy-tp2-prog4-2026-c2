@@ -16,7 +16,10 @@ import {
 export class ModalError implements AfterViewInit {
   titulo = input.required<string>();
   mensaje = input.required<string>();
+  // "error": un solo botón "Entendido". "confirmacion": botones "Cancelar" y "Eliminar"
+  tipo = input<'error' | 'confirmacion'>('error');
   cerrar = output<void>();
+  confirmar = output<void>();
 
   private botonCerrar = viewChild.required<ElementRef<HTMLButtonElement>>('botonCerrar');
 

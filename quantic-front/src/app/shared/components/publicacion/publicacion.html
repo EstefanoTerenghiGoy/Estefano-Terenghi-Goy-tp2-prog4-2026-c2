@@ -29,20 +29,41 @@
     />
   }
 
-  <!-- Por ahora son solo informativos: dar me gusta y los comentarios llegan después -->
   <footer class="pie">
-    <span class="dato dato-me-gusta" [class.mio]="publicacion().meGustaMio">
+    <button
+      type="button"
+      class="dato dato-me-gusta"
+      [class.mio]="publicacion().meGustaMio"
+      [attr.aria-pressed]="publicacion().meGustaMio"
+      [attr.aria-label]="'Me gusta: ' + textoMeGusta()"
+      [disabled]="ocupada()"
+      (click)="alternarMeGusta.emit()"
+    >
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
         <rect x="7" y="2" width="10" height="13" rx="4" fill="#E8743A" />
         <rect x="11" y="15" width="2" height="7" rx="1" fill="#E8E6DF" />
       </svg>
       {{ textoMeGusta() }}
-    </span>
+    </button>
     <span class="dato dato-comentarios">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <path d="M12 12c0-1 1-1.6 1.8-1.2 1.3.6 1.2 2.6-.2 3.4-2 1.1-4.6-.2-4.9-2.6C8.4 8.7 10.4 6 13.4 6.1c3.4.1 5.6 3.3 4.9 6.5" />
       </svg>
       {{ textoComentarios() }}
     </span>
+
+    @if (puedeEliminar()) {
+      <button
+        type="button"
+        class="dato eliminar"
+        [disabled]="ocupada()"
+        (click)="eliminar.emit()"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+        </svg>
+        ELIMINAR
+      </button>
+    }
   </footer>
 </article>

@@ -3,7 +3,9 @@ import { Service, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  EstadoMeGusta,
   OrdenPublicaciones,
+  Publicacion,
   RespuestaPublicaciones,
 } from '../../shared/models/publicacion';
 
@@ -27,5 +29,22 @@ export class PublicacionesService {
         },
       }),
     );
+  }
+
+  // FormData con titulo, descripcion y (opcional) el archivo en el campo "imagen"
+  crear(formData: FormData): Promise<Publicacion> {
+    return firstValueFrom(this.http.post<Publicacion>(this.url, formData));
+  }
+
+  eliminar(id: string): Promise<{ mensaje: string }> {
+    return firstValueFrom(this.http.delete<{ mensaje: string }>(`${this.url}/${id}`));
+  }
+
+  darMeGusta(id: string): Promise<EstadoMeGusta> {
+    return firstValueFrom(this.http.post<EstadoMeGusta>(`${this.url}/${id}/me-gusta`, {}));
+  }
+
+  quitarMeGusta(id: string): Promise<EstadoMeGusta> {
+    return firstValueFrom(this.http.delete<EstadoMeGusta>(`${this.url}/${id}/me-gusta`));
   }
 }

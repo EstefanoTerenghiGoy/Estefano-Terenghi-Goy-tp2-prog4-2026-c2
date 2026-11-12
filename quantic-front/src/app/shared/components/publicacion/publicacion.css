@@ -114,6 +114,27 @@
   color: var(--texto);
 }
 
+/* El me gusta y eliminar son botones: se les saca el estilo del navegador */
+button.dato {
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+button.dato:hover:not(:disabled) {
+  border-color: var(--acento);
+}
+
+button.dato:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 3px;
+}
+
+button.dato:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 /* Naranja cuando el usuario actual ya dio me gusta */
 .dato-me-gusta.mio {
   border-color: var(--acento);
@@ -124,6 +145,20 @@
 .dato-comentarios {
   border-color: var(--violeta);
   color: #a994f5;
+}
+
+/* Rojo, a la derecha del pie */
+.eliminar {
+  margin-left: auto;
+  border-color: rgba(229, 72, 77, 0.5);
+  color: #ff7a7e;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+button.eliminar:hover:not(:disabled) {
+  border-color: var(--error);
+  background: rgba(229, 72, 77, 0.12);
 }
 
 @media (max-width: 480px) {

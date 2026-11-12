@@ -17,6 +17,10 @@
   margin-bottom: 0;
 }
 
+.nueva {
+  margin-bottom: 24px;
+}
+
 .orden {
   display: inline-flex;
   padding: 4px;

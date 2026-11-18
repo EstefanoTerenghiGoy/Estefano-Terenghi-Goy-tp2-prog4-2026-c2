@@ -1,6 +1,11 @@
-/* El ancho de la columna deja lugar al panel lateral que se suma más adelante */
+/* Una sola columna centrada: la franja del loop arriba y el listado debajo */
 .columna {
-  max-width: 760px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.estado-loop {
+  margin-bottom: 32px;
 }
 
 .encabezado {

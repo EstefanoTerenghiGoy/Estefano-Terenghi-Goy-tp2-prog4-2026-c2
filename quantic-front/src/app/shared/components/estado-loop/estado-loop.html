@@ -1,0 +1,46 @@
+<section class="franja" aria-label="Estado del loop">
+  <!-- Decoración de fondo: órbitas y puntos. No captura clicks ni tapa el contenido -->
+  <svg class="decoracion" viewBox="0 0 460 240" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+    <ellipse cx="300" cy="150" rx="190" ry="78" fill="none" stroke="#8b93b8" stroke-opacity="0.22" transform="rotate(-14 300 150)" />
+    <ellipse cx="360" cy="128" rx="120" ry="42" fill="none" stroke="#F28C38" stroke-opacity="0.3" transform="rotate(-12 360 128)" />
+    <circle cx="238" cy="30" r="2.5" fill="#9aa0b4" />
+    <circle cx="310" cy="190" r="4" fill="#8b6cf0" />
+  </svg>
+
+  <div class="ring-y-datos">
+    <svg class="anillo" viewBox="0 0 150 150" role="img" [attr.aria-label]="etiqueta()">
+      <!-- Anillo base gris azulado -->
+      <circle [attr.cx]="centro" [attr.cy]="centro" [attr.r]="radio" fill="none" stroke="#1b2440" stroke-width="10" />
+      <!-- Arco naranja: tiempo que queda -->
+      <circle
+        [attr.cx]="centro"
+        [attr.cy]="centro"
+        [attr.r]="radio"
+        fill="none"
+        stroke="#F28C38"
+        stroke-width="10"
+        stroke-linecap="round"
+        [attr.stroke-dasharray]="circunferencia"
+        [attr.stroke-dashoffset]="desplazamiento()"
+        [attr.transform]="'rotate(-90 ' + centro + ' ' + centro + ')'"
+      />
+      <!-- El sol, con su halo -->
+      <circle [attr.cx]="centro" [attr.cy]="centro" r="34" fill="#F28C38" fill-opacity="0.14" />
+      <circle [attr.cx]="centro" [attr.cy]="centro" r="26" fill="none" stroke="#F28C38" stroke-opacity="0.4" stroke-width="3" />
+      <circle [attr.cx]="centro" [attr.cy]="centro" r="18" fill="#F28C38" />
+      <!-- Punto claro al final del arco -->
+      <circle [attr.cx]="punto().x" [attr.cy]="punto().y" r="5.5" fill="#E8E6DF" stroke="#0c0f18" stroke-width="2" />
+    </svg>
+
+    <div class="datos">
+      <p class="etiqueta">Estado del loop</p>
+      <p class="tiempo">{{ loop.tiempoTexto() }}</p>
+      <p class="leyenda">hasta que el sol explote</p>
+      <p class="duracion">{{ textoDuracion() }}</p>
+    </div>
+  </div>
+
+  <button type="button" class="boton extender" [disabled]="loop.extendiendo()" (click)="loop.extender()">
+    Extender el loop
+  </button>
+</section>

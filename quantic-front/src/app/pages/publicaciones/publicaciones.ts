@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, computed, inject, signal, viewChild } fr
 import { ModalService } from '../../core/services/modal.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
 import { esSesionVencida, mensajeDeError } from '../../core/utils/mensaje-error';
+import { EstadoLoop } from '../../shared/components/estado-loop/estado-loop';
 import { NuevaPublicacion } from '../../shared/components/nueva-publicacion/nueva-publicacion';
 import { Paginacion } from '../../shared/components/paginacion/paginacion';
 import { Publicacion } from '../../shared/components/publicacion/publicacion';
@@ -15,7 +16,7 @@ const POR_PAGINA = 5;
 
 @Component({
   selector: 'app-publicaciones',
-  imports: [Publicacion, Paginacion, NuevaPublicacion],
+  imports: [Publicacion, Paginacion, NuevaPublicacion, EstadoLoop],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css',
 })

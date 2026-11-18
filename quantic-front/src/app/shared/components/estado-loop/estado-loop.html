@@ -9,9 +9,7 @@
 
   <div class="ring-y-datos">
     <svg class="anillo" viewBox="0 0 150 150" role="img" [attr.aria-label]="etiqueta()">
-      <!-- Anillo base gris azulado -->
       <circle [attr.cx]="centro" [attr.cy]="centro" [attr.r]="radio" fill="none" stroke="#1b2440" stroke-width="10" />
-      <!-- Arco naranja: tiempo que queda -->
       <circle
         [attr.cx]="centro"
         [attr.cy]="centro"
@@ -24,11 +22,9 @@
         [attr.stroke-dashoffset]="desplazamiento()"
         [attr.transform]="'rotate(-90 ' + centro + ' ' + centro + ')'"
       />
-      <!-- El sol, con su halo -->
       <circle [attr.cx]="centro" [attr.cy]="centro" r="34" fill="#F28C38" fill-opacity="0.14" />
       <circle [attr.cx]="centro" [attr.cy]="centro" r="26" fill="none" stroke="#F28C38" stroke-opacity="0.4" stroke-width="3" />
       <circle [attr.cx]="centro" [attr.cy]="centro" r="18" fill="#F28C38" />
-      <!-- Punto claro al final del arco -->
       <circle [attr.cx]="punto().x" [attr.cy]="punto().y" r="5.5" fill="#E8E6DF" stroke="#0c0f18" stroke-width="2" />
     </svg>
 
@@ -36,7 +32,6 @@
       <p class="etiqueta">Estado del loop</p>
       <p class="tiempo">{{ loop.tiempoTexto() }}</p>
       <p class="leyenda">hasta que el sol explote</p>
-      <p class="duracion">{{ textoDuracion() }}</p>
     </div>
   </div>
 

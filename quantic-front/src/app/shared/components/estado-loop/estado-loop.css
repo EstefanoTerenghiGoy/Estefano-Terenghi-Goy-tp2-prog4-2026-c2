@@ -60,15 +60,9 @@
 }
 
 .datos .leyenda {
-  margin-top: 8px;
-}
-
-.datos .duracion {
   margin-top: 10px;
   font-family: var(--fuente-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--texto-suave);
+  font-size: 14px;
 }
 
 .extender {
@@ -97,6 +91,10 @@
 
   .tiempo {
     font-size: 40px;
+  }
+
+  .datos .leyenda {
+    font-size: 12px;
   }
 
   .extender {

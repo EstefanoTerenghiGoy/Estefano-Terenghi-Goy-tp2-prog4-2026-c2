@@ -82,7 +82,6 @@ export class AuthService {
     if (!usuario || !(await bcrypt.compare(dto.password, usuario.password))) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
-    // Se chequea después de la contraseña para no revelar el estado de la cuenta a quien no la conoce
     if (!usuario.activo) {
       throw new ForbiddenException(
         'Tu cuenta está deshabilitada. Contactá a un administrador.',
@@ -91,19 +90,16 @@ export class AuthService {
     return this.respuestaConToken(usuario);
   }
 
-  // Devuelve los datos actuales del usuario del token (mismo formato que "usuario" en el login)
   async autorizar(usuarioId: string) {
     const usuario = await this.buscarUsuarioActivo(usuarioId);
     return this.sinPassword(usuario);
   }
 
-  // Token nuevo con los datos actuales de la base; no se copian iat ni exp del token viejo
   async refrescar(usuarioId: string) {
     const usuario = await this.buscarUsuarioActivo(usuarioId);
     return { token: await this.firmarToken(usuario) };
   }
 
-  // 401 si el usuario ya no existe o fue deshabilitado: su token deja de servir
   private async buscarUsuarioActivo(usuarioId: string) {
     const usuario = Types.ObjectId.isValid(usuarioId)
       ? await this.usuarioModel.findById(usuarioId)

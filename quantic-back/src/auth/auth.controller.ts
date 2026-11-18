@@ -35,7 +35,6 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
-  // Valida el token y devuelve los datos actuales del usuario
   @Post('autorizar')
   @HttpCode(200)
   @UseGuards(AuthGuard)
@@ -43,7 +42,6 @@ export class AuthController {
     return this.authService.autorizar(req.usuario.sub);
   }
 
-  // Devuelve un token nuevo con vencimiento renovado
   @Post('refrescar')
   @HttpCode(200)
   @UseGuards(AuthGuard)

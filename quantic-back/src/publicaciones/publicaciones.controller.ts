@@ -18,7 +18,6 @@ import { PublicacionesService } from './publicaciones.service.js';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto.js';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto.js';
 import { IdPublicacionDto } from './dto/id-publicacion.dto.js';
-import { ListarComentariosDto } from './dto/listar-comentarios.dto.js';
 import { AuthGuard, PayloadToken } from '../auth/auth.guard.js';
 
 @Controller('publicaciones')
@@ -73,10 +72,5 @@ export class PublicacionesController {
   @Delete(':id/me-gusta')
   quitarMeGusta(@Param() { id }: IdPublicacionDto, @Req() req: { usuario: PayloadToken }) {
     return this.publicacionesService.quitarMeGusta(id, req.usuario.sub);
-  }
-
-  @Get(':id/comentarios')
-  listarComentarios(@Param() { id }: IdPublicacionDto, @Query() query: ListarComentariosDto) {
-    return this.publicacionesService.listarComentarios(id, query);
   }
 }

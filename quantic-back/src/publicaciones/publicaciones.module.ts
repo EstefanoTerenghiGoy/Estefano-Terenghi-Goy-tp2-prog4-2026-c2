@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PublicacionesService } from './publicaciones.service.js';
 import { PublicacionesController } from './publicaciones.controller.js';
+import { ComentariosService } from './comentarios.service.js';
+import { ComentariosController } from './comentarios.controller.js';
 import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema.js';
 import { Comentario, ComentarioSchema } from './schemas/comentario.schema.js';
 import { Usuario, UsuarioSchema } from '../usuarios/schemas/usuario.schema.js';
@@ -16,7 +18,7 @@ import { CloudinaryModule } from '../common/cloudinary/cloudinary.module.js';
       { name: Usuario.name, schema: UsuarioSchema },
     ]),
   ],
-  controllers: [PublicacionesController],
-  providers: [PublicacionesService],
+  controllers: [PublicacionesController, ComentariosController],
+  providers: [PublicacionesService, ComentariosService],
 })
 export class PublicacionesModule {}

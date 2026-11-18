@@ -12,7 +12,6 @@ import { Usuario } from '../usuarios/schemas/usuario.schema.js';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service.js';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto.js';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto.js';
-import { ListarComentariosDto } from './dto/listar-comentarios.dto.js';
 import { PayloadToken } from '../auth/auth.guard.js';
 
 @Injectable()
@@ -115,37 +114,6 @@ export class PublicacionesService {
       await this.fallarMeGusta(id, 'Todavía no le diste me gusta a esta publicación');
     }
     return this.estadoMeGusta(id, uid);
-  }
-
-  async listarComentarios(id: string, { offset, limit }: ListarComentariosDto) {
-    const publicacionId = new Types.ObjectId(id);
-    if (!(await this.publicacionModel.exists({ _id: publicacionId, eliminada: false }))) {
-      throw new NotFoundException('La publicación no existe');
-    }
-
-    const [datos, total] = await Promise.all([
-      this.comentarioModel.aggregate([
-        { $match: { publicacion: publicacionId } },
-        { $sort: { createdAt: -1, _id: -1 } },
-        { $skip: offset },
-        { $limit: limit },
-        {
-          $lookup: {
-            from: this.usuarioModel.collection.name,
-            localField: 'autor',
-            foreignField: '_id',
-            pipeline: [
-              { $project: { nombre: 1, apellido: 1, nombreUsuario: 1, imagenPerfil: 1 } },
-            ],
-            as: 'autor',
-          },
-        },
-        { $unwind: '$autor' },
-        { $project: { mensaje: 1, createdAt: 1, modificado: 1, autor: 1 } },
-      ]),
-      this.comentarioModel.countDocuments({ publicacion: publicacionId }),
-    ]);
-    return { datos, total, offset, limit };
   }
 
   // El update no modificó nada: o la publicación no existe (404) o el me gusta ya estaba así (409)

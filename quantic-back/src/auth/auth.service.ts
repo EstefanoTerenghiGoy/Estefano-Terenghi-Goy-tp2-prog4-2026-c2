@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { HydratedDocument, Model } from 'mongoose';
+import { HydratedDocument, Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuarios/schemas/usuario.schema.js';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service.js';
@@ -91,14 +91,41 @@ export class AuthService {
     return this.respuestaConToken(usuario);
   }
 
-  private async respuestaConToken(
-    usuario: HydratedDocument<Usuario>,
-  ) {
-    const token = await this.jwtService.signAsync({
+  // Devuelve los datos actuales del usuario del token (mismo formato que "usuario" en el login)
+  async autorizar(usuarioId: string) {
+    const usuario = await this.buscarUsuarioActivo(usuarioId);
+    return this.sinPassword(usuario);
+  }
+
+  // Token nuevo con los datos actuales de la base; no se copian iat ni exp del token viejo
+  async refrescar(usuarioId: string) {
+    const usuario = await this.buscarUsuarioActivo(usuarioId);
+    return { token: await this.firmarToken(usuario) };
+  }
+
+  // 401 si el usuario ya no existe o fue deshabilitado: su token deja de servir
+  private async buscarUsuarioActivo(usuarioId: string) {
+    const usuario = Types.ObjectId.isValid(usuarioId)
+      ? await this.usuarioModel.findById(usuarioId)
+      : null;
+    if (!usuario || !usuario.activo) {
+      throw new UnauthorizedException('La sesión ya no es válida');
+    }
+    return usuario;
+  }
+
+  private firmarToken(usuario: HydratedDocument<Usuario>) {
+    return this.jwtService.signAsync({
       sub: usuario.id,
       usuario: usuario.nombreUsuario,
       perfil: usuario.perfil,
     });
+  }
+
+  private async respuestaConToken(
+    usuario: HydratedDocument<Usuario>,
+  ) {
+    const token = await this.firmarToken(usuario);
     return { token, usuario: this.sinPassword(usuario) };
   }
 

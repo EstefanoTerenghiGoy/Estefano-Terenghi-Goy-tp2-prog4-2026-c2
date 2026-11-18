@@ -5,7 +5,9 @@ import { catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../services/auth.service';
 
-const RUTAS_SIN_REDIRECCION = ['/auth/login', '/auth/registro'];
+// Rutas donde un 401 lo maneja la propia pantalla: el login y el registro muestran un modal, y la
+// pantalla de cargando (/auth/autorizar) cierra la sesión y navega ella sola, sin doble redirect
+const RUTAS_SIN_REDIRECCION = ['/auth/login', '/auth/registro', '/auth/autorizar'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);

@@ -2,7 +2,12 @@ import { Routes } from '@angular/router';
 import { autenticadoGuard, invitadoGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // Al abrir la app se pasa por la pantalla de cargando, que valida el token con el back
+  { path: '', redirectTo: 'cargando', pathMatch: 'full' },
+  {
+    path: 'cargando',
+    loadComponent: () => import('./pages/cargando/cargando').then((m) => m.Cargando),
+  },
   {
     path: 'login',
     canActivate: [invitadoGuard],
@@ -29,5 +34,5 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: 'cargando' },
 ];

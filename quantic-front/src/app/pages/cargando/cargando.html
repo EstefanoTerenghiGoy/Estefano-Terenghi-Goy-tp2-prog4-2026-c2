@@ -1,0 +1,39 @@
+<main class="pantalla">
+  <svg
+    class="logo"
+    [class.quieto]="!validando()"
+    viewBox="0 0 120 80"
+    width="168"
+    height="112"
+    aria-hidden="true"
+  >
+    <circle cx="60" cy="40" r="26" fill="#F28C3826" />
+    <circle cx="60" cy="40" r="17" fill="#F28C38" />
+    <!-- Anillo tenue y, encima, un arco brillante que lo recorre (pathLength=100 para animarlo en %) -->
+    <ellipse cx="60" cy="40" rx="54" ry="19" fill="none" stroke="#F28C38" stroke-opacity="0.35" stroke-width="1.6" transform="rotate(-20 60 40)" />
+    <ellipse
+      class="arco"
+      cx="60"
+      cy="40"
+      rx="54"
+      ry="19"
+      fill="none"
+      stroke="#E8E6DF"
+      stroke-width="2.4"
+      stroke-linecap="round"
+      pathLength="100"
+      transform="rotate(-20 60 40)"
+    />
+  </svg>
+
+  <h1 class="nombre">QUANTIC</h1>
+
+  @if (validando()) {
+    <p class="estado" role="status">{{ texto() }}</p>
+  } @else {
+    <div class="error" role="alert">
+      <p class="estado">No pudimos conectar con el servidor</p>
+      <button type="button" class="boton" (click)="validar()">Reintentar</button>
+    </div>
+  }
+</main>

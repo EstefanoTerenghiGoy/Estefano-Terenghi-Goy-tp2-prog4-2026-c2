@@ -1,0 +1,70 @@
+.pantalla {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Un tramo del anillo (12 de 100) se desplaza por toda la elipse, dando la vuelta */
+.arco {
+  stroke-dasharray: 12 88;
+  animation: orbitar 2.4s linear infinite;
+}
+
+@keyframes orbitar {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+/* Con error: el anillo se detiene */
+.quieto .arco {
+  animation: none;
+}
+
+.nombre {
+  margin-top: 12px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.estado {
+  max-width: 360px;
+  margin: 14px 0 0;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  line-height: 1.6;
+  color: var(--texto-suave);
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.error .estado {
+  color: var(--texto);
+}
+
+/* Sin animación para quien pidió reducir el movimiento: el arco queda quieto */
+@media (prefers-reduced-motion: reduce) {
+  .arco {
+    animation: none;
+  }
+}

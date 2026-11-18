@@ -25,6 +25,14 @@ export class AuthService {
     return firstValueFrom(this.http.post<RespuestaAuth>(`${this.url}/login`, { usuario, password }));
   }
 
+  async autorizar(): Promise<Usuario> {
+    const usuario = await firstValueFrom(this.http.post<Usuario>(`${this.url}/autorizar`, {}));
+    try {
+      localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario)); // datos frescos
+    } catch {}
+    return usuario;
+  }
+
   guardarSesion(token: string, usuario: Usuario): void {
     try {
       localStorage.setItem(CLAVE_TOKEN, token);

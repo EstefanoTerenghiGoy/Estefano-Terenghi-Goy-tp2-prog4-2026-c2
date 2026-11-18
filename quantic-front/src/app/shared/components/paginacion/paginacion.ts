@@ -12,7 +12,6 @@ export class Paginacion {
   totalPaginas = input.required<number>();
   cambiar = output<number>();
 
-  // Ventana de números centrada en la página actual, para que no se desborde con muchas páginas
   numeros = computed(() => {
     const total = this.totalPaginas();
     const cantidad = Math.min(MAX_NUMEROS, total);

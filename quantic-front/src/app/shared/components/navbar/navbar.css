@@ -155,25 +155,60 @@
   color: var(--error);
 }
 
-
-.regla {
-  position: relative;
-  height: 12px;
-  margin: 0 16px;
-  border-bottom: 1px solid var(--borde);
-  background:
-    repeating-linear-gradient(90deg, rgba(154, 160, 180, 0.4) 0 1px, transparent 1px 40px) bottom / 100% 10px no-repeat,
-    repeating-linear-gradient(90deg, rgba(154, 160, 180, 0.25) 0 1px, transparent 1px 8px) bottom / 100% 5px no-repeat;
+/* Bloque del loop dentro del menú */
+.loop {
+  margin-bottom: 8px;
+  padding: 14px;
+  background: rgba(242, 140, 56, 0.05);
+  border: 1px solid rgba(242, 140, 56, 0.3);
+  border-radius: 14px;
 }
 
-.regla::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  width: 60%;
-  height: 1px;
+.loop-fila {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.loop-etiqueta {
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--acento);
+}
+
+.loop-tiempo {
+  font-family: var(--fuente-mono);
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.loop-progreso {
+  height: 4px;
+  margin: 10px 0 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--borde);
+}
+
+.loop-relleno {
+  height: 100%;
   background: var(--acento);
+  transition: width 1s linear;
+}
+
+.boton-extender {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  font-size: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loop-relleno {
+    transition: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -191,9 +226,5 @@
 @media (min-width: 900px) {
   .barra {
     padding: 0 32px;
-  }
-
-  .regla {
-    margin: 0 32px;
   }
 }

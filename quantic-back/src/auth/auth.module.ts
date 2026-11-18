@@ -6,6 +6,8 @@ import { CloudinaryModule } from '../common/cloudinary/cloudinary.module.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 
+const DURACION_TOKEN = '22m';
+
 @Module({
   imports: [
     UsuariosModule,
@@ -15,7 +17,7 @@ import { AuthService } from './auth.service.js';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.getOrThrow<string>('JWT_SECRET'), // si falta, la app no arranca
-        signOptions: { expiresIn: '1m' },
+        signOptions: { expiresIn: DURACION_TOKEN },
       }),
     }),
   ],

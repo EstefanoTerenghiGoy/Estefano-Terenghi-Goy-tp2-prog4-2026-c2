@@ -17,6 +17,18 @@
   border-top-color: var(--error);
 }
 
+/* Variante de aviso (loop): en naranja en vez de rojo */
+.modal.aviso {
+  border-color: rgba(242, 140, 56, 0.35);
+  border-top-color: var(--acento);
+}
+
+.aviso .icono {
+  border-color: var(--acento);
+  background: rgba(242, 140, 56, 0.12);
+  color: var(--acento);
+}
+
 .icono {
   display: inline-flex;
   align-items: center;

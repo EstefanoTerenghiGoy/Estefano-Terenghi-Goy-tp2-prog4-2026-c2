@@ -1,0 +1,125 @@
+:host {
+  display: block;
+}
+
+.regla {
+  --loop: 100%;
+  position: relative;
+  height: 12px;
+  margin: 0 16px;
+  border-bottom: 1px solid var(--borde);
+  background:
+    repeating-linear-gradient(90deg, rgba(154, 160, 180, 0.4) 0 1px, transparent 1px 40px) bottom / 100% 10px no-repeat,
+    repeating-linear-gradient(90deg, rgba(154, 160, 180, 0.25) 0 1px, transparent 1px 8px) bottom / 100% 5px no-repeat;
+}
+
+.regla:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.regla::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 -10px 0;
+}
+
+.barra,
+.marcador {
+  position: absolute;
+  bottom: -1px;
+  background: var(--acento);
+}
+
+.barra {
+  left: 0;
+  width: var(--loop);
+  height: 2px;
+  transition: width 1s linear;
+}
+
+.marcador {
+  left: var(--loop);
+  width: 2px;
+  height: 12px;
+  transform: translateX(-1px);
+  transition: left 1s linear;
+}
+
+.tooltip {
+  position: absolute;
+  top: 100%;
+  left: clamp(195px, var(--loop), calc(100% - 195px)); /* centrado en el marcador sin salirse */
+  z-index: 50;
+  width: 390px;
+  max-width: calc(100vw - 32px);
+  padding-top: 8px; 
+  transform: translateX(-50%);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.regla:hover .tooltip,
+.regla:focus-within .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.caja {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px 12px 16px;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.datos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.etiqueta-loop {
+  font-family: var(--fuente-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--acento);
+}
+
+.tiempo {
+  font-family: var(--fuente-mono);
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.boton {
+  flex-shrink: 0;
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra,
+  .marcador,
+  .tooltip {
+    transition: none;
+  }
+}
+
+@media (min-width: 480px) {
+  .etiqueta-loop {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 900px) {
+  .regla {
+    margin: 0 32px;
+  }
+}

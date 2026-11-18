@@ -44,6 +44,26 @@
           <strong>{{ usuario()?.nombre }} {{ usuario()?.apellido }}</strong>
           <span class="menu-usuario">&#64;{{ usuario()?.nombreUsuario }}</span>
         </div>
+
+        <!-- Loop: tiempo que le queda al token -->
+        <div class="loop">
+          <div class="loop-fila">
+            <span class="loop-etiqueta">LOOP ACTUAL</span>
+            <span class="loop-tiempo">{{ loop.tiempoTexto() }}</span>
+          </div>
+          <div class="loop-progreso" aria-hidden="true">
+            <div class="loop-relleno" [style.width.%]="loop.porcentaje()"></div>
+          </div>
+          <button
+            type="button"
+            class="boton boton-secundario boton-extender"
+            role="menuitem"
+            [disabled]="loop.extendiendo()"
+            (click)="loop.extender()"
+          >
+            Extender el loop
+          </button>
+        </div>
         <a class="menu-item" role="menuitem" routerLink="/perfil" (click)="cerrarMenu()">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="8" r="4" />
@@ -61,5 +81,5 @@
     }
   </div>
 </header>
-<!-- Regla de rayitas: solo decoración -->
-<div class="regla" aria-hidden="true"></div>
+<!-- Regla de rayitas con el tiempo que queda del loop -->
+<app-regla-loop />

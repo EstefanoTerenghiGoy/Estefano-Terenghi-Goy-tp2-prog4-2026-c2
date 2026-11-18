@@ -1,0 +1,22 @@
+<div
+  class="regla"
+  role="group"
+  tabindex="0"
+  [attr.aria-label]="etiqueta()"
+  [style.--loop]="loop.porcentaje() + '%'"
+>
+  <span class="barra" aria-hidden="true"></span>
+  <span class="marcador" aria-hidden="true"></span>
+
+  <div class="tooltip">
+    <div class="caja">
+      <div class="datos">
+        <span class="etiqueta-loop">LOOP · TIEMPO RESTANTE</span>
+        <span class="tiempo">{{ loop.tiempoTexto() }}</span>
+      </div>
+      <button type="button" class="boton" [disabled]="loop.extendiendo()" (click)="loop.extender()">
+        Extender el loop
+      </button>
+    </div>
+  </div>
+</div>

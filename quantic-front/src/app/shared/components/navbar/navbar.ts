@@ -1,18 +1,21 @@
 import { Component, HostListener, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { LoopService } from '../../../core/services/loop.service';
 import { ClickOutside } from '../../directives/click-outside';
 import { Iniciales } from '../../pipes/iniciales';
+import { ReglaLoop } from '../regla-loop/regla-loop';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, ClickOutside, Iniciales],
+  imports: [RouterLink, RouterLinkActive, ClickOutside, Iniciales, ReglaLoop],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
   private authService = inject(AuthService);
   private router = inject(Router);
+  loop = inject(LoopService);
 
   usuario = signal(this.authService.obtenerUsuario());
   menuAbierto = signal(false);
@@ -37,6 +40,7 @@ export class Navbar {
   }
 
   async cerrarSesion(): Promise<void> {
+    this.loop.detener();
     this.authService.cerrarSesion();
     this.cerrarMenu();
     await this.router.navigate(['/login']);

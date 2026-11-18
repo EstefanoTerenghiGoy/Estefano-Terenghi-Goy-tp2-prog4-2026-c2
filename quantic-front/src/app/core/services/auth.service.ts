@@ -28,9 +28,19 @@ export class AuthService {
   async autorizar(): Promise<Usuario> {
     const usuario = await firstValueFrom(this.http.post<Usuario>(`${this.url}/autorizar`, {}));
     try {
-      localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario)); // datos frescos
+      localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario));
     } catch {}
     return usuario;
+  }
+
+  // Pide un token nuevo (con el vencimiento renovado) y lo guarda; el usuario guardado no cambia
+  async refrescar(): Promise<void> {
+    const { token } = await firstValueFrom(
+      this.http.post<{ token: string }>(`${this.url}/refrescar`, {}),
+    );
+    try {
+      localStorage.setItem(CLAVE_TOKEN, token);
+    } catch {}
   }
 
   guardarSesion(token: string, usuario: Usuario): void {

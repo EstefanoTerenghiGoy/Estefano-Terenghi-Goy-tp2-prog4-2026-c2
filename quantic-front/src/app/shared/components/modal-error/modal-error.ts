@@ -16,8 +16,10 @@ import {
 export class ModalError implements AfterViewInit {
   titulo = input.required<string>();
   mensaje = input.required<string>();
-  // "error": un solo botón "Entendido". "confirmacion": botones "Cancelar" y "Eliminar"
-  tipo = input<'error' | 'confirmacion'>('error');
+  // "error": un solo botón "Entendido". "confirmacion": botones "Cancelar" y "Eliminar".
+  // "aviso": reloj naranja y botones "Extender el loop" (emite confirmar) y "Ahora no" (emite cerrar)
+  tipo = input<'error' | 'confirmacion' | 'aviso'>('error');
+  ocupado = input(false); // deshabilita el botón principal mientras hay un pedido en curso
   cerrar = output<void>();
   confirmar = output<void>();
 

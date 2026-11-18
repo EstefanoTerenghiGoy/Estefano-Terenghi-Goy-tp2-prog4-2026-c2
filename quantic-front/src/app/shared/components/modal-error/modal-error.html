@@ -1,26 +1,42 @@
 <div class="fondo">
   <div
     class="modal tarjeta"
+    [class.aviso]="tipo() === 'aviso'"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-titulo"
     aria-describedby="modal-mensaje"
   >
     <span class="icono" aria-hidden="true">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M12 6v7M12 17.5v.01" />
-      </svg>
+      @if (tipo() === 'aviso') {
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M12 7.5V12l2.5 2.5" />
+        </svg>
+      } @else {
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 6v7M12 17.5v.01" />
+        </svg>
+      }
     </span>
     <h2 id="modal-titulo">{{ titulo() }}</h2>
     <p id="modal-mensaje">{{ mensaje() }}</p>
     @if (tipo() === 'confirmacion') {
-      <!-- El foco empieza en "Cancelar" para no borrar algo por apretar Enter sin querer -->
       <div class="acciones">
         <button #botonCerrar type="button" class="boton boton-secundario" (click)="cerrar.emit()">
           Cancelar
         </button>
         <button type="button" class="boton boton-peligro" (click)="confirmar.emit()">
           Eliminar
+        </button>
+      </div>
+    } @else if (tipo() === 'aviso') {
+      <div class="acciones">
+        <button #botonCerrar type="button" class="boton" [disabled]="ocupado()" (click)="confirmar.emit()">
+          Extender el loop
+        </button>
+        <button type="button" class="boton boton-secundario" (click)="cerrar.emit()">
+          Ahora no
         </button>
       </div>
     } @else {

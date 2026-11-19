@@ -6,16 +6,17 @@ import { ModalService } from '../../core/services/modal.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
 import { esSesionVencida, mensajeDeError } from '../../core/utils/mensaje-error';
 import { Comentario } from '../../shared/components/comentario/comentario';
+import { MuroNomai } from '../../shared/components/muro-nomai/muro-nomai';
 import { NuevaTransmision } from '../../shared/components/nueva-transmision/nueva-transmision';
 import { Publicacion } from '../../shared/components/publicacion/publicacion';
-import { Comentario as ComentarioModelo } from '../../shared/models/comentario';
+import { Comentario as ComentarioModelo, ComentarioNumerado } from '../../shared/models/comentario';
 import { Publicacion as PublicacionModelo } from '../../shared/models/publicacion';
 
 const POR_TANDA = 5;
 
 @Component({
   selector: 'app-publicacion-detalle',
-  imports: [RouterLink, Publicacion, Comentario, NuevaTransmision],
+  imports: [RouterLink, Publicacion, Comentario, NuevaTransmision, MuroNomai],
   templateUrl: './publicacion-detalle.html',
   styleUrl: './publicacion-detalle.css',
 })
@@ -42,6 +43,24 @@ export class PublicacionDetalle implements OnInit {
   guardandoId = signal<string | null>(null); 
 
   hayMas = computed(() => this.comentarios().length < this.totalComentarios());
+
+  // Cada comentario con su número cronológico (el más antiguo es #1, el más nuevo es #total). Como
+  // la lista siempre arranca por el más nuevo, el número es total menos la posición: no cambia
+  // cuando llega un comentario nuevo.
+  numerados = computed<ComentarioNumerado[]>(() =>
+    this.comentarios().map((comentario, i) => ({ comentario, numero: this.totalComentarios() - i })),
+  );
+
+  // Traducción de las transmisiones: vive solo en esta pantalla (se pierde al salir de la página)
+  traducidos = signal<ReadonlySet<string>>(new Set());
+  seleccionado = signal<string | null>(null); // el último que se tocó
+
+  // Desde el muro o desde el comentario es lo mismo: se agrega al conjunto y queda seleccionado.
+  // No se puede "destraducir".
+  traducir(id: string): void {
+    this.traducidos.update((conjunto) => (conjunto.has(id) ? conjunto : new Set(conjunto).add(id)));
+    this.seleccionado.set(id);
+  }
 
   async ngOnInit(): Promise<void> {
     await this.cargarPublicacion();
@@ -113,6 +132,7 @@ export class PublicacionDetalle implements OnInit {
     }
     this.comentarios.update((lista) => [comentario, ...lista]);
     this.totalComentarios.update((total) => total + 1);
+    this.traducir(comentario._id); // el que escribís vos aparece ya traducido
     this.publicacion.update((p) => (p ? { ...p, cantidadComentarios: p.cantidadComentarios + 1 } : p));
   }
 

@@ -1,0 +1,125 @@
+/* Una sola columna centrada, del mismo ancho que el listado */
+.detalle {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.volver {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+}
+
+.volver:hover {
+  text-decoration: underline;
+}
+
+.transmisiones {
+  margin-top: 40px;
+}
+
+.encabezado-transmisiones {
+  margin-bottom: 16px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a994f5;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contador {
+  margin: 16px 0 12px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+.mas {
+  min-height: 44px;
+  padding: 0 24px;
+  border: 1px solid var(--violeta);
+  border-radius: 999px;
+  background: transparent;
+  color: #cfc4ff;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+}
+
+.mas:hover:not(:disabled) {
+  background: rgba(139, 108, 240, 0.14);
+}
+
+.mas:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 3px;
+}
+
+.mas:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.vacio {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 40px 0;
+  font-family: var(--fuente-mono);
+  color: var(--texto-suave);
+}
+
+.rueda {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--borde);
+  border-top-color: var(--acento);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rueda {
+    animation-duration: 3s;
+  }
+}
+
+.estado-tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.estado-tarjeta p {
+  margin: 0;
+}

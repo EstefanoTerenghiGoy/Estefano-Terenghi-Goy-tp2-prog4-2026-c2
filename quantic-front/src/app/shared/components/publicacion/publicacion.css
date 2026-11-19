@@ -147,6 +147,56 @@ button.dato:disabled {
   color: #a994f5;
 }
 
+/* Título y contador de transmisiones, links al detalle */
+.enlace-titulo {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.enlace-titulo:hover {
+  color: var(--acento);
+}
+
+a.dato {
+  font-weight: 400;
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+a.dato:hover {
+  border-color: #a994f5;
+  background: rgba(139, 108, 240, 0.12);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Modo detalle: todo más grande y la imagen a ancho completo, sin recortar */
+.detalle {
+  padding: 28px;
+}
+
+.detalle .titulo {
+  margin: 24px 0 14px;
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.detalle .descripcion {
+  font-size: 18px;
+}
+
+.detalle .imagen {
+  height: auto;
+  max-height: none;
+  margin-top: 22px;
+  object-fit: contain;
+}
+
 /* Rojo, a la derecha del pie */
 .eliminar {
   margin-left: auto;
@@ -164,6 +214,18 @@ button.eliminar:hover:not(:disabled) {
 @media (max-width: 480px) {
   .titulo {
     font-size: 21px;
+  }
+
+  .detalle {
+    padding: 20px;
+  }
+
+  .detalle .titulo {
+    font-size: 28px;
+  }
+
+  .detalle .descripcion {
+    font-size: 16px;
   }
 
   /* Pastillas más compactas para que los dos datos entren en una fila */

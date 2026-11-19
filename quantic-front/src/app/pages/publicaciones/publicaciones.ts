@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { ModalService } from '../../core/services/modal.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
@@ -72,19 +71,15 @@ export class Publicaciones implements OnInit {
     }
     this.marcarOcupada(publicacion._id, true);
     try {
-      const estado = publicacion.meGustaMio
-        ? await this.publicacionesService.quitarMeGusta(publicacion._id)
-        : await this.publicacionesService.darMeGusta(publicacion._id);
-      // Se reemplaza solo esa publicación; la lista no se reordena
-      this.publicaciones.update((lista) =>
-        lista.map((p) => (p._id === publicacion._id ? { ...p, ...estado } : p)),
-      );
-    } catch (error) {
-      if (error instanceof HttpErrorResponse && error.status === 409) {
+      const resultado = await this.publicacionesService.alternarMeGusta(publicacion);
+      if (resultado === 'conflicto') {
         // El me gusta ya estaba así en el servidor (otra pestaña, por ejemplo): se sincroniza
         await this.cargar();
-      } else {
-        this.mostrarErrorDeAccion('No se pudo actualizar el me gusta', error);
+      } else if (resultado) {
+        // Se reemplaza solo esa publicación; la lista no se reordena
+        this.publicaciones.update((lista) =>
+          lista.map((p) => (p._id === publicacion._id ? { ...p, ...resultado } : p)),
+        );
       }
     } finally {
       this.marcarOcupada(publicacion._id, false);
@@ -95,24 +90,16 @@ export class Publicaciones implements OnInit {
     if (this.ocupadas().includes(publicacion._id)) {
       return;
     }
-    const confirmo = await this.modalService.confirmar(
-      'Eliminar entrada',
-      `¿Seguro que querés eliminar «${publicacion.titulo}»? Esta acción no se puede deshacer.`,
-    );
-    if (!confirmo) {
-      return;
-    }
     this.marcarOcupada(publicacion._id, true);
     try {
-      await this.publicacionesService.eliminar(publicacion._id);
-      // Si era la única de la página y no es la primera, se vuelve a la anterior
-      if (this.publicaciones().length <= 1 && this.pagina() > 1) {
-        this.pagina.update((p) => p - 1);
-      }
-      await this.cargar();
-    } catch (error) {
-      this.mostrarErrorDeAccion('No se pudo eliminar la entrada', error);
-      if (error instanceof HttpErrorResponse && error.status === 404) {
+      const resultado = await this.publicacionesService.confirmarYEliminar(publicacion);
+      if (resultado === 'eliminada') {
+        // Si era la única de la página y no es la primera, se vuelve a la anterior
+        if (this.publicaciones().length <= 1 && this.pagina() > 1) {
+          this.pagina.update((p) => p - 1);
+        }
+        await this.cargar();
+      } else if (resultado === 'inexistente') {
         await this.cargar(); // ya no existía: se actualiza la lista
       }
     } finally {
@@ -155,15 +142,5 @@ export class Publicaciones implements OnInit {
 
   private marcarOcupada(id: string, ocupada: boolean): void {
     this.ocupadas.update((ids) => (ocupada ? [...ids, id] : ids.filter((x) => x !== id)));
-  }
-
-  private mostrarErrorDeAccion(titulo: string, error: unknown): void {
-    if (esSesionVencida(error)) {
-      return;
-    }
-    this.modalService.mostrarError(
-      titulo,
-      mensajeDeError(error, 'Ocurrió un error inesperado. Probá de nuevo.'),
-    );
   }
 }

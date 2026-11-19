@@ -1,0 +1,62 @@
+<div class="detalle">
+  <a class="volver" routerLink="/publicaciones">← VOLVER A PUBLICACIONES</a>
+
+  @if (cargando()) {
+    <p class="estado" role="status">
+      <span class="rueda" aria-hidden="true"></span>
+      Cargando publicación…
+    </p>
+  } @else if (noExiste()) {
+    <section class="tarjeta estado-tarjeta">
+      <p>Esta publicación no existe o fue eliminada</p>
+      <a class="boton boton-secundario" routerLink="/publicaciones">Volver a publicaciones</a>
+    </section>
+  } @else if (conError()) {
+    <section class="tarjeta estado-tarjeta">
+      <p>No pudimos cargar la publicación.</p>
+      <button type="button" class="boton boton-secundario" (click)="cargarPublicacion()">Reintentar</button>
+    </section>
+  } @else if (publicacion(); as p) {
+    <app-publicacion
+      [publicacion]="p"
+      [detalle]="true"
+      [ocupada]="ocupada()"
+      (alternarMeGusta)="alternarMeGusta()"
+      (eliminar)="eliminar()"
+    />
+
+    <section class="transmisiones" aria-labelledby="titulo-transmisiones">
+      <h2 id="titulo-transmisiones" class="encabezado-transmisiones">
+        Transmisiones · {{ totalComentarios() }}
+      </h2>
+
+      @if (cargandoComentarios()) {
+        <p class="estado" role="status">
+          <span class="rueda" aria-hidden="true"></span>
+          Cargando transmisiones…
+        </p>
+      } @else if (errorComentarios()) {
+        <div class="vacio">
+          <p>No pudimos cargar las transmisiones.</p>
+          <button type="button" class="mas" (click)="cargarComentarios()">REINTENTAR</button>
+        </div>
+      } @else if (comentarios().length === 0) {
+        <p class="vacio">Todavía no hay transmisiones.</p>
+      } @else {
+        <ul class="lista">
+          @for (comentario of comentarios(); track comentario._id) {
+            <li><app-comentario [comentario]="comentario" /></li>
+          }
+        </ul>
+
+        <p class="contador">mostrando {{ comentarios().length }} de {{ totalComentarios() }}</p>
+
+        @if (hayMas()) {
+          <button type="button" class="mas" [disabled]="cargandoMas()" (click)="cargarMas()">
+            {{ cargandoMas() ? 'CARGANDO…' : 'CARGAR MÁS TRANSMISIONES' }}
+          </button>
+        }
+      }
+    </section>
+  }
+</div>

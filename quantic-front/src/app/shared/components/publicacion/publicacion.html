@@ -1,4 +1,4 @@
-<article class="tarjeta publicacion">
+<article class="tarjeta publicacion" [class.detalle]="detalle()" [class.tarjeta-acento]="detalle()">
   <header class="cabecera">
     <div class="avatar">
       @if (publicacion().autor.imagenPerfil) {
@@ -17,7 +17,13 @@
     <span class="codigo">{{ codigo() }}</span>
   </header>
 
-  <h2 class="titulo">{{ publicacion().titulo }}</h2>
+  @if (detalle()) {
+    <h1 class="titulo">{{ publicacion().titulo }}</h1>
+  } @else {
+    <h2 class="titulo">
+      <a class="enlace-titulo" [routerLink]="['/publicaciones', publicacion()._id]">{{ publicacion().titulo }}</a>
+    </h2>
+  }
   <p class="descripcion">{{ publicacion().descripcion }}</p>
 
   @if (publicacion().imagenUrl) {
@@ -25,7 +31,7 @@
       class="imagen"
       [src]="publicacion().imagenUrl"
       alt="Imagen de la publicación «{{ publicacion().titulo }}»"
-      loading="lazy"
+      [attr.loading]="detalle() ? 'eager' : 'lazy'"
     />
   }
 
@@ -45,12 +51,19 @@
       </svg>
       {{ textoMeGusta() }}
     </button>
-    <span class="dato dato-comentarios">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <path d="M12 12c0-1 1-1.6 1.8-1.2 1.3.6 1.2 2.6-.2 3.4-2 1.1-4.6-.2-4.9-2.6C8.4 8.7 10.4 6 13.4 6.1c3.4.1 5.6 3.3 4.9 6.5" />
-      </svg>
-      {{ textoComentarios() }}
-    </span>
+
+    <!-- En el listado el contador es un link al detalle; en el detalle es solo texto -->
+    @if (detalle()) {
+      <span class="dato dato-comentarios">
+        <ng-container [ngTemplateOutlet]="iconoTransmision" />
+        {{ textoComentarios() }}
+      </span>
+    } @else {
+      <a class="dato dato-comentarios" [routerLink]="['/publicaciones', publicacion()._id]">
+        <ng-container [ngTemplateOutlet]="iconoTransmision" />
+        {{ textoComentarios() }}
+      </a>
+    }
 
     @if (puedeEliminar()) {
       <button
@@ -67,3 +80,10 @@
     }
   </footer>
 </article>
+
+<!-- Espiral violeta de "transmisiones" (se usa en el link y en el texto) -->
+<ng-template #iconoTransmision>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    <path d="M12 12c0-1 1-1.6 1.8-1.2 1.3.6 1.2 2.6-.2 3.4-2 1.1-4.6-.2-4.9-2.6C8.4 8.7 10.4 6 13.4 6.1c3.4.1 5.6 3.3 4.9 6.5" />
+  </svg>
+</ng-template>

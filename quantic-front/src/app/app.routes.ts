@@ -29,6 +29,13 @@ export const routes: Routes = [
           import('./pages/publicaciones/publicaciones').then((m) => m.Publicaciones),
       },
       {
+        path: 'publicaciones/:id',
+        loadComponent: () =>
+          import('./pages/publicacion-detalle/publicacion-detalle').then(
+            (m) => m.PublicacionDetalle,
+          ),
+      },
+      {
         path: 'perfil',
         loadComponent: () => import('./pages/perfil/perfil').then((m) => m.Perfil),
       },

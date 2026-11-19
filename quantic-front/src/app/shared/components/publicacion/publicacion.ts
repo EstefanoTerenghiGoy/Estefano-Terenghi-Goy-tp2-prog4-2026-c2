@@ -1,4 +1,6 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { Publicacion as PublicacionModelo } from '../../models/publicacion';
 import { Iniciales } from '../../pipes/iniciales';
@@ -6,7 +8,7 @@ import { TiempoRelativo } from '../../pipes/tiempo-relativo';
 
 @Component({
   selector: 'app-publicacion',
-  imports: [Iniciales, TiempoRelativo],
+  imports: [Iniciales, TiempoRelativo, RouterLink, NgTemplateOutlet],
   templateUrl: './publicacion.html',
   styleUrl: './publicacion.css',
 })
@@ -16,6 +18,8 @@ export class Publicacion {
   publicacion = input.required<PublicacionModelo>();
   // El padre la prende mientras hay un pedido en curso sobre esta publicación
   ocupada = input(false);
+  // Modo detalle: letra e imagen más grandes, y sin links hacia la propia pantalla de detalle
+  detalle = input(false);
 
   alternarMeGusta = output<void>();
   eliminar = output<void>();

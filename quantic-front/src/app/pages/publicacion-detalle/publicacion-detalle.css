@@ -32,6 +32,10 @@
   color: #a994f5;
 }
 
+.nueva {
+  margin-bottom: 16px;
+}
+
 .lista {
   display: flex;
   flex-direction: column;

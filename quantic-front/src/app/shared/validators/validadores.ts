@@ -15,6 +15,18 @@ export const passwordsIguales: ValidatorFn = (grupo) => {
   return igual ? null : { noCoinciden: true };
 };
 
+export const MAX_COMENTARIO = 300;
+
+// Mensaje de una transmisión: sin contar los espacios del principio y del final, de 1 a 300
+// caracteres. Un mensaje de solo espacios es inválido.
+export const mensajeComentario: ValidatorFn = (control) => {
+  const largo = (control.value ?? '').trim().length;
+  if (largo === 0) {
+    return { required: true };
+  }
+  return largo > MAX_COMENTARIO ? { maxlength: true } : null;
+};
+
 export const fechaNoFutura: ValidatorFn = (control) => {
   return control.value && control.value > hoy() ? { fechaFutura: true } : null;
 };

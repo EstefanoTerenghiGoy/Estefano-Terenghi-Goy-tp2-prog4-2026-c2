@@ -8,17 +8,52 @@
   </div>
 
   <div class="cuerpo">
-    <p class="encabezado">
-      <strong class="nombre">{{ nombreAutor() }}</strong>
-      <span class="datos">
-        &#64;{{ comentario().autor.nombreUsuario }} ·
-        <span class="tiempo">{{ comentario().createdAt | tiempoRelativo }}</span>
-        @if (comentario().modificado) {
-          · <span class="editado">editado</span>
-        }
-      </span>
-    </p>
-    <!-- Bloque del mensaje: acá irá la capa de glifos del paso 7 -->
-    <p class="mensaje">{{ comentario().mensaje }}</p>
+    <div class="fila">
+      <p class="encabezado">
+        <strong class="nombre">{{ nombreAutor() }}</strong>
+        <span class="datos">
+          &#64;{{ comentario().autor.nombreUsuario }} ·
+          <span class="tiempo">{{ comentario().createdAt | tiempoRelativo }}</span>
+          @if (comentario().modificado) {
+            · <span class="editado">editado</span>
+          }
+        </span>
+      </p>
+      @if (esAutor() && !editando()) {
+        <button type="button" class="editar" (click)="empezarEdicion()">Editar</button>
+      }
+    </div>
+
+    @if (editando()) {
+      <form class="edicion" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+        <textarea
+          #areaEdicion
+          class="input"
+          rows="3"
+          formControlName="mensaje"
+          aria-label="Editar mensaje"
+          [class.invalido]="largo() > maximo"
+          [attr.aria-invalid]="largo() > maximo"
+          (keydown.escape)="cancelar()"
+        ></textarea>
+        <div class="acciones">
+          <span class="contador" [class.excedido]="largo() > maximo">
+            {{ largo() }} / {{ maximo }}
+            @if (largo() > maximo) {
+              · máximo {{ maximo }} caracteres
+            }
+          </span>
+          <button type="button" class="boton boton-secundario chico" [disabled]="ocupado()" (click)="cancelar()">
+            Cancelar
+          </button>
+          <button type="submit" class="boton chico" [disabled]="form.invalid || ocupado()">
+            {{ ocupado() ? 'Guardando…' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    } @else {
+      <!-- Bloque del mensaje: acá irá la capa de glifos del paso 7 -->
+      <p class="mensaje">{{ comentario().mensaje }}</p>
+    }
   </div>
 </article>

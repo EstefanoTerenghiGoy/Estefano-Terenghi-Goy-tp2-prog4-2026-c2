@@ -37,7 +37,78 @@
   flex: 1;
 }
 
+.fila {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.editar {
+  flex-shrink: 0;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-suave);
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.editar:hover {
+  border-color: var(--violeta);
+  color: #cfc4ff;
+}
+
+.editar:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 2px;
+}
+
+.edicion {
+  margin-top: 10px;
+}
+
+textarea.input {
+  min-height: 80px;
+}
+
+textarea.input:focus {
+  border-color: var(--violeta);
+  box-shadow: 0 0 0 3px rgba(139, 108, 240, 0.25);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.contador {
+  margin-right: auto;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+.contador.excedido {
+  color: var(--error);
+}
+
+.chico {
+  min-height: 38px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+
 .encabezado {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;

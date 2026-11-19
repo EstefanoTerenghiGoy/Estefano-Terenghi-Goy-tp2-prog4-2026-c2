@@ -30,6 +30,8 @@
         Transmisiones · {{ totalComentarios() }}
       </h2>
 
+      <app-nueva-transmision class="nueva" [publicacionId]="p._id" (creada)="agregarComentario($event)" />
+
       @if (cargandoComentarios()) {
         <p class="estado" role="status">
           <span class="rueda" aria-hidden="true"></span>
@@ -45,7 +47,13 @@
       } @else {
         <ul class="lista">
           @for (comentario of comentarios(); track comentario._id) {
-            <li><app-comentario [comentario]="comentario" /></li>
+            <li>
+              <app-comentario
+                [comentario]="comentario"
+                [ocupado]="guardandoId() === comentario._id"
+                (editar)="editarComentario(comentario, $event)"
+              />
+            </li>
           }
         </ul>
 

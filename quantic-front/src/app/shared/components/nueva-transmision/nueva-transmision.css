@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.formulario {
+  padding: 20px;
+}
+
+.etiqueta-violeta {
+  display: block;
+  margin-bottom: 12px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #a994f5;
+}
+
+textarea.input {
+  min-height: 88px;
+}
+
+textarea.input:focus {
+  border-color: var(--violeta);
+  box-shadow: 0 0 0 3px rgba(139, 108, 240, 0.25);
+}
+
+.pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.contador {
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  color: var(--texto-suave);
+}
+
+.contador.excedido {
+  color: var(--error);
+}
+
+@media (max-width: 480px) {
+  .pie .boton {
+    width: 100%;
+  }
+}

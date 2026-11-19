@@ -1,0 +1,25 @@
+<form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+  <label class="etiqueta-violeta" for="nueva-transmision">Nueva transmisión</label>
+  <textarea
+    id="nueva-transmision"
+    class="input"
+    rows="3"
+    formControlName="mensaje"
+    placeholder="Escribí tu transmisión..."
+    [class.invalido]="largo() > maximo"
+    [attr.aria-invalid]="largo() > maximo"
+    aria-describedby="contador-transmision"
+  ></textarea>
+
+  <div class="pie">
+    <span id="contador-transmision" class="contador" [class.excedido]="largo() > maximo">
+      {{ largo() }} / {{ maximo }}
+      @if (largo() > maximo) {
+        · máximo {{ maximo }} caracteres
+      }
+    </span>
+    <button type="submit" class="boton" [disabled]="form.invalid || enviando()">
+      {{ enviando() ? 'Enviando…' : 'Enviar transmisión' }}
+    </button>
+  </div>
+</form>

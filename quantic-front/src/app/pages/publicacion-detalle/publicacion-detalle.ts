@@ -6,6 +6,7 @@ import { ModalService } from '../../core/services/modal.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
 import { esSesionVencida, mensajeDeError } from '../../core/utils/mensaje-error';
 import { Comentario } from '../../shared/components/comentario/comentario';
+import { NuevaTransmision } from '../../shared/components/nueva-transmision/nueva-transmision';
 import { Publicacion } from '../../shared/components/publicacion/publicacion';
 import { Comentario as ComentarioModelo } from '../../shared/models/comentario';
 import { Publicacion as PublicacionModelo } from '../../shared/models/publicacion';
@@ -14,7 +15,7 @@ const POR_TANDA = 5; // comentarios que se traen cada vez
 
 @Component({
   selector: 'app-publicacion-detalle',
-  imports: [RouterLink, Publicacion, Comentario],
+  imports: [RouterLink, Publicacion, Comentario, NuevaTransmision],
   templateUrl: './publicacion-detalle.html',
   styleUrl: './publicacion-detalle.css',
 })
@@ -38,6 +39,7 @@ export class PublicacionDetalle implements OnInit {
   cargandoComentarios = signal(true);
   cargandoMas = signal(false);
   errorComentarios = signal(false);
+  guardandoId = signal<string | null>(null); // comentario que se está guardando
 
   hayMas = computed(() => this.comentarios().length < this.totalComentarios());
 
@@ -92,6 +94,9 @@ export class PublicacionDetalle implements OnInit {
     }
     this.cargandoMas.set(true);
     try {
+      // El offset es la cantidad que ya tenemos en la lista. Como el back ordena de más reciente a
+      // más viejo, cada comentario nuevo que agregamos al principio corre en 1 a todos los demás
+      // en el back, y a la vez suma 1 a esta cantidad: así la frontera no se repite.
       const respuesta = await this.comentariosService.listar(this.id, {
         offset: this.comentarios().length,
         limit: POR_TANDA,
@@ -108,11 +113,31 @@ export class PublicacionDetalle implements OnInit {
     }
   }
 
-  // Lo va a usar el formulario de nueva transmisión (paso 6): el comentario nuevo va primero
+  // Lo usa el formulario de nueva transmisión: el comentario nuevo va primero, y se suma 1 al total
+  // y a la cantidad de comentarios de la publicación
   agregarComentario(comentario: ComentarioModelo): void {
+    if (this.comentarios().some((c) => c._id === comentario._id)) {
+      return; // ya estaba en la lista
+    }
     this.comentarios.update((lista) => [comentario, ...lista]);
     this.totalComentarios.update((total) => total + 1);
     this.publicacion.update((p) => (p ? { ...p, cantidadComentarios: p.cantidadComentarios + 1 } : p));
+  }
+
+  // Guarda la edición y reemplaza ese comentario por el que devolvió el back (modificado: true)
+  async editarComentario(comentario: ComentarioModelo, mensaje: string): Promise<void> {
+    if (this.guardandoId()) {
+      return;
+    }
+    this.guardandoId.set(comentario._id);
+    try {
+      const nuevo = await this.comentariosService.editar(this.id, comentario._id, mensaje);
+      this.comentarios.update((lista) => lista.map((c) => (c._id === nuevo._id ? nuevo : c)));
+    } catch (error) {
+      this.mostrarError('No se pudo guardar la transmisión', error);
+    } finally {
+      this.guardandoId.set(null);
+    }
   }
 
   async alternarMeGusta(): Promise<void> {

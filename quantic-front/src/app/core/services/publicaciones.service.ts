@@ -11,7 +11,6 @@ import {
 import { esSesionVencida, mensajeDeError } from '../utils/mensaje-error';
 import { ModalService } from './modal.service';
 
-// Resultado de confirmarYEliminar()
 export type ResultadoEliminar = 'eliminada' | 'cancelada' | 'inexistente' | 'error';
 
 @Service()
@@ -20,12 +19,11 @@ export class PublicacionesService {
   private modalService = inject(ModalService);
   private url = `${environment.apiUrl}/publicaciones`;
 
-  // El token lo agrega el interceptor
   listar(opciones: {
     orden: OrdenPublicaciones;
     offset: number;
     limit: number;
-    usuarioId?: string; // si se pasa, solo las publicaciones de ese usuario
+    usuarioId?: string;
   }): Promise<RespuestaPublicaciones> {
     const params: Record<string, string | number> = {
       orden: opciones.orden,
@@ -38,12 +36,10 @@ export class PublicacionesService {
     return firstValueFrom(this.http.get<RespuestaPublicaciones>(this.url, { params }));
   }
 
-  // 404 si no existe o está dada de baja
   obtenerPorId(id: string): Promise<Publicacion> {
     return firstValueFrom(this.http.get<Publicacion>(`${this.url}/${id}`));
   }
 
-  // FormData con titulo, descripcion y (opcional) el archivo en el campo "imagen"
   crear(formData: FormData): Promise<Publicacion> {
     return firstValueFrom(this.http.post<Publicacion>(this.url, formData));
   }
@@ -60,9 +56,6 @@ export class PublicacionesService {
     return firstValueFrom(this.http.delete<EstadoMeGusta>(`${this.url}/${id}/me-gusta`));
   }
 
-  // Lo comparten el listado y el detalle. Da o quita el me gusta según el estado actual.
-  // Devuelve el estado nuevo, 'conflicto' si el servidor ya lo tenía así (409: conviene volver a
-  // pedir la publicación para sincronizar) o null si falló (ya se mostró el modal de error).
   async alternarMeGusta(publicacion: Publicacion): Promise<EstadoMeGusta | 'conflicto' | null> {
     try {
       return publicacion.meGustaMio
@@ -77,8 +70,6 @@ export class PublicacionesService {
     }
   }
 
-  // Lo comparten el listado y el detalle. Pide confirmación y, si se acepta, elimina. Los errores
-  // (403, 404, etc.) se muestran en el modal de error.
   async confirmarYEliminar(publicacion: Publicacion): Promise<ResultadoEliminar> {
     const confirmo = await this.modalService.confirmar(
       'Eliminar entrada',
@@ -98,7 +89,7 @@ export class PublicacionesService {
 
   private mostrarError(titulo: string, error: unknown): void {
     if (esSesionVencida(error)) {
-      return; // el interceptor ya te mandó al login
+      return;
     }
     this.modalService.mostrarError(
       titulo,

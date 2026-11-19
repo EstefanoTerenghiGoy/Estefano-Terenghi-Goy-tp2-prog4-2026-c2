@@ -1,6 +1,5 @@
 import { Directive, ElementRef, HostListener, inject, output } from '@angular/core';
 
-// Emite "clickOutside" cuando se hace click fuera del elemento donde está puesta
 @Directive({ selector: '[clickOutside]' })
 export class ClickOutside {
   clickOutside = output<void>();

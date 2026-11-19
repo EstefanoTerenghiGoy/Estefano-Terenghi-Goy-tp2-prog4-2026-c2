@@ -6,7 +6,7 @@ export interface Usuario {
   nombreUsuario: string;
   fechaNacimiento: string;
   descripcion: string;
-  imagenPerfil?: string; // es opcional: puede no tener foto
+  imagenPerfil?: string;
   perfil: 'usuario' | 'administrador';
   activo: boolean;
 }

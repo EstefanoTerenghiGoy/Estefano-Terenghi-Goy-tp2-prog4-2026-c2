@@ -79,7 +79,6 @@
   color: var(--error);
 }
 
-/* Dos columnas desde tablet; en celular cada campo ocupa todo el ancho */
 @media (min-width: 600px) {
   .fila {
     display: grid;

@@ -11,7 +11,6 @@ import { FechaLarga } from '../../shared/pipes/fecha-larga';
 import { Iniciales } from '../../shared/pipes/iniciales';
 import { TiempoRelativo } from '../../shared/pipes/tiempo-relativo';
 
-// Una publicación del perfil junto con sus primeros comentarios
 interface EntradaPerfil {
   publicacion: Publicacion;
   comentarios: RespuestaComentarios;
@@ -63,7 +62,6 @@ export class Perfil implements OnInit {
         limit: CANTIDAD_ENTRADAS,
         usuarioId: usuario._id,
       });
-      // Los comentarios de todas las publicaciones se piden a la vez
       const comentarios = await Promise.all(
         datos.map((p) =>
           this.comentariosService.listar(p._id, { offset: 0, limit: CANTIDAD_COMENTARIOS }),

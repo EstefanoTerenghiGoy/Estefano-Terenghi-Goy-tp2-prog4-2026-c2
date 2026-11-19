@@ -13,7 +13,6 @@
   height: auto;
 }
 
-/* Un tramo del anillo (12 de 100) se desplaza por toda la elipse, dando la vuelta */
 .arco {
   stroke-dasharray: 12 88;
   animation: orbitar 2.4s linear infinite;
@@ -28,7 +27,6 @@
   }
 }
 
-/* Con error: el anillo se detiene */
 .quieto .arco {
   animation: none;
 }
@@ -62,7 +60,6 @@
   color: var(--texto);
 }
 
-/* Sin animación para quien pidió reducir el movimiento: el arco queda quieto */
 @media (prefers-reduced-motion: reduce) {
   .arco {
     animation: none;

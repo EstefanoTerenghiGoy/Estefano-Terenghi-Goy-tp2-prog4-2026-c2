@@ -25,46 +25,68 @@
       (eliminar)="eliminar()"
     />
 
-    <section class="transmisiones" aria-labelledby="titulo-transmisiones">
-      <h2 id="titulo-transmisiones" class="encabezado-transmisiones">
-        Transmisiones · {{ totalComentarios() }}
-      </h2>
+    <!-- Debajo de la publicación: el muro a la izquierda y las transmisiones a la derecha -->
+    <div class="columnas">
+      <div class="muro">
+        <app-muro-nomai
+          [items]="numerados()"
+          [total]="totalComentarios()"
+          [traducidos]="traducidos()"
+          [seleccionado]="seleccionado()"
+          (traducir)="traducir($event)"
+        />
+      </div>
 
-      <app-nueva-transmision class="nueva" [publicacionId]="p._id" (creada)="agregarComentario($event)" />
+      <section class="transmisiones" aria-labelledby="titulo-transmisiones">
+        <h2 id="titulo-transmisiones" class="encabezado-transmisiones">
+          Transmisiones · {{ totalComentarios() }}
+        </h2>
 
-      @if (cargandoComentarios()) {
-        <p class="estado" role="status">
-          <span class="rueda" aria-hidden="true"></span>
-          Cargando transmisiones…
-        </p>
-      } @else if (errorComentarios()) {
-        <div class="vacio">
-          <p>No pudimos cargar las transmisiones.</p>
-          <button type="button" class="mas" (click)="cargarComentarios()">REINTENTAR</button>
-        </div>
-      } @else if (comentarios().length === 0) {
-        <p class="vacio">Todavía no hay transmisiones.</p>
-      } @else {
-        <ul class="lista">
-          @for (comentario of comentarios(); track comentario._id) {
-            <li>
-              <app-comentario
-                [comentario]="comentario"
-                [ocupado]="guardandoId() === comentario._id"
-                (editar)="editarComentario(comentario, $event)"
-              />
-            </li>
+        <app-nueva-transmision class="nueva" [publicacionId]="p._id" (creada)="agregarComentario($event)" />
+
+        @if (cargandoComentarios()) {
+          <p class="estado" role="status">
+            <span class="rueda" aria-hidden="true"></span>
+            Cargando transmisiones…
+          </p>
+        } @else if (errorComentarios()) {
+          <div class="vacio">
+            <p>No pudimos cargar las transmisiones.</p>
+            <button type="button" class="mas" (click)="cargarComentarios()">REINTENTAR</button>
+          </div>
+        } @else if (comentarios().length === 0) {
+          <p class="vacio">Todavía no hay transmisiones.</p>
+        } @else {
+          <ul class="lista">
+            @for (item of numerados(); track item.comentario._id) {
+              <li>
+                <app-comentario
+                  [comentario]="item.comentario"
+                  [numero]="item.numero"
+                  [traducido]="traducidos().has(item.comentario._id)"
+                  [seleccionado]="seleccionado() === item.comentario._id"
+                  [ocupado]="guardandoId() === item.comentario._id"
+                  (traducir)="traducir(item.comentario._id)"
+                  (editar)="editarComentario(item.comentario, $event)"
+                />
+              </li>
+            }
+          </ul>
+
+          @if (cargandoMas()) {
+            <!-- Mientras llegan las siguientes: una tarjeta "recibiendo transmisión" -->
+            <div class="recibiendo" role="status">
+              <span class="numero-pendiente">#{{ totalComentarios() - comentarios().length }}</span>
+              <span>Recibiendo transmisión <span class="caret" aria-hidden="true"></span></span>
+            </div>
+          } @else if (hayMas()) {
+            <p class="contador">mostrando {{ comentarios().length }} de {{ totalComentarios() }}</p>
+            <button type="button" class="mas" (click)="cargarMas()">CARGAR MÁS TRANSMISIONES</button>
+          } @else {
+            <p class="fin">NO HAY MÁS TRANSMISIONES</p>
           }
-        </ul>
-
-        <p class="contador">mostrando {{ comentarios().length }} de {{ totalComentarios() }}</p>
-
-        @if (hayMas()) {
-          <button type="button" class="mas" [disabled]="cargandoMas()" (click)="cargarMas()">
-            {{ cargandoMas() ? 'CARGANDO…' : 'CARGAR MÁS TRANSMISIONES' }}
-          </button>
         }
-      }
-    </section>
+      </section>
+    </div>
   }
 </div>

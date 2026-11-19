@@ -9,6 +9,9 @@
   --error: #e5484d;
   --exito: #34c79a;
   --input: #07090f;
+  --violeta-claro: #a996f5;
+  --beige: #eadbb8;
+  --cian: #5cc8e0;
 
   --fuente-texto: 'Jost', system-ui, sans-serif;
   --fuente-mono: 'Space Mono', ui-monospace, monospace;
@@ -215,4 +218,62 @@ textarea.input {
 
 .error-campo {
   color: var(--error);
+}
+
+/* Transmisiones: animaciones del muro de espirales y de los glifos traducidos */
+.nomai-draw {
+  stroke-dasharray: 1; /* los trazos usan pathLength="1" */
+  stroke-dashoffset: 1;
+  animation: nomaiDraw 1.6s ease-out forwards;
+}
+
+@keyframes nomaiDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.reveal {
+  animation: reveal 1.3s ease-out both;
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.4;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: var(--violeta-claro);
+  vertical-align: middle;
+  animation: blink 0.9s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nomai-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .reveal {
+    animation: none;
+  }
+
+  .caret {
+    animation: none;
+  }
 }

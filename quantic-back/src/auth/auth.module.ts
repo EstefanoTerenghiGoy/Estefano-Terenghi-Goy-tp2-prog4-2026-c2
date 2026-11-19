@@ -6,7 +6,7 @@ import { CloudinaryModule } from '../common/cloudinary/cloudinary.module.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 
-const DURACION_TOKEN = '22m';
+const DURACION_TOKEN = '1m';
 
 @Module({
   imports: [

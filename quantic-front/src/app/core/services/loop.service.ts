@@ -18,13 +18,11 @@ export class LoopService {
   avisoVisible = signal(false);
   extendiendo = signal(false);
 
-  // Porcentaje de loop que queda, de 0 a 100
   porcentaje = computed(() => {
     const total = this.duracionTotal();
     return total > 0 ? Math.min(100, Math.max(0, (this.segundosRestantes() / total) * 100)) : 0;
   });
 
-  // "MM:SS"
   tiempoTexto = computed(() => {
     const segundos = this.segundosRestantes();
     const minutos = Math.floor(segundos / 60);

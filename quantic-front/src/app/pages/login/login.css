@@ -24,7 +24,6 @@
   font-size: 14px;
 }
 
-/* Ventanas bajas: menos aire entre elementos para evitar el scroll */
 @media (max-height: 830px) {
   .campo {
     gap: 6px;

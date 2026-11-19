@@ -5,12 +5,17 @@ export interface Comentario {
   mensaje: string;
   createdAt: string;
   modificado: boolean;
-  autor: AutorPublicacion; // mismos datos públicos que el autor de una publicación
+  autor: AutorPublicacion;
+}
+
+export interface ComentarioNumerado {
+  comentario: Comentario;
+  numero: number;
 }
 
 export interface RespuestaComentarios {
   datos: Comentario[];
-  total: number; // cantidad total sin paginar
+  total: number; 
   offset: number;
   limit: number;
 }

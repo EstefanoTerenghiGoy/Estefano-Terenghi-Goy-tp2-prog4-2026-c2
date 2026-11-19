@@ -1,59 +1,84 @@
-<article class="comentario">
-  <div class="avatar">
-    @if (comentario().autor.imagenPerfil) {
-      <img [src]="comentario().autor.imagenPerfil" alt="Foto de perfil de {{ nombreAutor() }}" />
-    } @else {
-      {{ nombreAutor() | iniciales }}
-    }
-  </div>
-
-  <div class="cuerpo">
-    <div class="fila">
-      <p class="encabezado">
-        <strong class="nombre">{{ nombreAutor() }}</strong>
-        <span class="datos">
-          &#64;{{ comentario().autor.nombreUsuario }} ·
-          <span class="tiempo">{{ comentario().createdAt | tiempoRelativo }}</span>
-          @if (comentario().modificado) {
-            · <span class="editado">editado</span>
-          }
-        </span>
-      </p>
-      @if (esAutor() && !editando()) {
-        <button type="button" class="editar" (click)="empezarEdicion()">Editar</button>
-      }
+<article class="comentario" [class.seleccionado]="seleccionado()">
+  @if (traducido()) {
+    <!-- TRADUCIDO: espiral beige y el contenido real -->
+    <div class="espiral-caja">
+      <app-mini-espiral [idComentario]="comentario()._id" [traducido]="true" />
     </div>
 
-    @if (editando()) {
-      <form class="edicion" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
-        <textarea
-          #areaEdicion
-          class="input"
-          rows="3"
-          formControlName="mensaje"
-          aria-label="Editar mensaje"
-          [class.invalido]="largo() > maximo"
-          [attr.aria-invalid]="largo() > maximo"
-          (keydown.escape)="cancelar()"
-        ></textarea>
-        <div class="acciones">
-          <span class="contador" [class.excedido]="largo() > maximo">
-            {{ largo() }} / {{ maximo }}
-            @if (largo() > maximo) {
-              · máximo {{ maximo }} caracteres
+    <div class="cuerpo reveal">
+      <div class="fila">
+        <p class="encabezado">
+          <strong class="nombre">{{ nombreAutor() }}</strong>
+          @if (esAutor()) {
+            <span class="vos">VOS</span>
+          }
+          <span class="datos">
+            #{{ numero() }} ·
+            <span class="tiempo">{{ comentario().createdAt | tiempoRelativo }}</span>
+            @if (comentario().modificado) {
+              · <span class="editado">editado</span>
             }
           </span>
-          <button type="button" class="boton boton-secundario chico" [disabled]="ocupado()" (click)="cancelar()">
-            Cancelar
-          </button>
-          <button type="submit" class="boton chico" [disabled]="form.invalid || ocupado()">
-            {{ ocupado() ? 'Guardando…' : 'Guardar' }}
-          </button>
-        </div>
-      </form>
-    } @else {
-      <!-- Bloque del mensaje: acá irá la capa de glifos del paso 7 -->
-      <p class="mensaje">{{ comentario().mensaje }}</p>
-    }
-  </div>
+        </p>
+        @if (esAutor() && !editando()) {
+          <button type="button" class="editar" (click)="empezarEdicion()">EDITAR</button>
+        }
+      </div>
+
+      @if (editando()) {
+        <form class="edicion" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+          <textarea
+            #areaEdicion
+            class="input"
+            rows="3"
+            formControlName="mensaje"
+            aria-label="Editar mensaje"
+            [class.invalido]="largo() > maximo"
+            [attr.aria-invalid]="largo() > maximo"
+            (keydown.escape)="cancelar()"
+          ></textarea>
+          <div class="acciones">
+            <span class="contador" [class.excedido]="largo() > maximo">
+              {{ largo() }} / {{ maximo }}
+              @if (largo() > maximo) {
+                · máximo {{ maximo }} caracteres
+              }
+            </span>
+            <button type="button" class="boton boton-secundario chico" [disabled]="ocupado()" (click)="cancelar()">
+              Cancelar
+            </button>
+            <button type="submit" class="boton chico" [disabled]="form.invalid || ocupado()">
+              {{ ocupado() ? 'Guardando…' : 'Guardar' }}
+            </button>
+          </div>
+        </form>
+      } @else {
+        <p class="mensaje">{{ comentario().mensaje }}</p>
+      }
+    </div>
+  } @else {
+    <!-- CERRADO: espiral violeta y el mensaje en glifos. Cualquiera de los dos botones traduce -->
+    <button
+      type="button"
+      class="espiral-caja boton-espiral"
+      [attr.aria-label]="'Traducir transmisión ' + numero()"
+      (click)="traducir.emit()"
+    >
+      <app-mini-espiral [idComentario]="comentario()._id" />
+    </button>
+
+    <button
+      type="button"
+      class="glifos"
+      [attr.aria-label]="'Traducir transmisión ' + numero() + ' de ' + nombreAutor()"
+      (click)="traducir.emit()"
+    >
+      <span class="g-nombre">{{ glifosNombre() }}</span>
+      <span class="g-meta">
+        #{{ numero() }} · {{ comentario().createdAt | tiempoRelativo }}
+      </span>
+      <span class="g-mensaje">{{ glifosMensaje() }}</span>
+      <span class="g-leyenda">TOCÁ PARA TRADUCIR</span>
+    </button>
+  }
 </article>

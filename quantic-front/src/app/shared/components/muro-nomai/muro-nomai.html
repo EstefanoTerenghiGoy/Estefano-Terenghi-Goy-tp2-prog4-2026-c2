@@ -1,0 +1,64 @@
+<section class="muro tarjeta">
+  <header class="cabecera">
+    <h2 class="titulo">Muro de transmisiones</h2>
+    <span class="progreso">{{ traducidas() }}/{{ total() }} TRADUCIDAS</span>
+  </header>
+  <div class="barra" aria-hidden="true">
+    <div class="relleno" [style.width.%]="porcentaje()"></div>
+  </div>
+
+  <div class="lienzo">
+    @for (tesela of teselas(); track tesela.indice) {
+      <svg
+        class="tesela"
+        viewBox="0 0 340 290"
+        role="group"
+        aria-label="Muro de transmisiones en espiral. Tocá una espiral para traducirla."
+      >
+        <defs>
+          <filter [attr.id]="'brillo-' + tesela.indice" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="1.8" result="difuso" />
+            <feMerge>
+              <feMergeNode in="difuso" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        @for (e of tesela.espirales; track e.id) {
+          <g
+            class="espiral"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Traducir transmisión ' + e.numero"
+            (click)="traducir.emit(e.id)"
+            (keydown.enter)="activar($event, e.id)"
+            (keydown.space)="activar($event, e.id)"
+          >
+            <!-- Trazo ancho transparente: es el área de click -->
+            <path class="area" [attr.d]="e.camino" pathLength="1" />
+            <path
+              class="violeta"
+              [attr.d]="e.camino"
+              pathLength="1"
+              [attr.stroke-width]="e.grosor"
+              [attr.filter]="'url(#brillo-' + tesela.indice + ')'"
+            />
+            @if (estaTraducido(e.id)) {
+              <path class="beige nomai-draw" [attr.d]="e.camino" pathLength="1" [attr.stroke-width]="e.grosor" />
+            }
+            @if (seleccionado() === e.id) {
+              <!-- El "traductor": cuadro cian sobre la espiral elegida más recientemente -->
+              <rect class="traductor" [attr.x]="e.x - 14" [attr.y]="e.y - 14" width="28" height="28" rx="6" />
+            }
+            <circle class="foco" [attr.cx]="e.x" [attr.cy]="e.y" r="15" />
+            <circle class="inicio" [class.traducida]="estaTraducido(e.id)" [attr.cx]="e.x" [attr.cy]="e.y" r="9" />
+            <text class="numero" [class.traducida]="estaTraducido(e.id)" [attr.x]="e.x" [attr.y]="e.y">{{ e.numero }}</text>
+          </g>
+        }
+      </svg>
+    }
+  </div>
+
+  <p class="ayuda">Tocá una espiral o una transmisión para traducirla.</p>
+</section>

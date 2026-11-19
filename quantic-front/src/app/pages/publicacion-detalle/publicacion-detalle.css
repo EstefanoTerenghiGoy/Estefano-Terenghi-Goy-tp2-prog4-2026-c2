@@ -1,6 +1,6 @@
-/* Una sola columna centrada, del mismo ancho que el listado */
+/* Una sola columna centrada; debajo de la publicación van el muro y las transmisiones */
 .detalle {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -18,8 +18,23 @@
   text-decoration: underline;
 }
 
+/* Dos columnas: el muro (flex 1 1 360px) y las transmisiones (flex 999 1 440px). En celular se apilan */
+.columnas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.muro {
+  flex: 1 1 360px;
+  min-width: 0;
+}
+
 .transmisiones {
-  margin-top: 40px;
+  flex: 999 1 440px;
+  min-width: 0;
 }
 
 .encabezado-transmisiones {
@@ -126,4 +141,37 @@
 
 .estado-tarjeta p {
   margin: 0;
+}
+
+/* Tarjeta mientras llegan más transmisiones */
+.recibiendo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px dashed var(--violeta);
+  border-radius: 16px;
+  font-family: var(--fuente-mono);
+  font-size: 13px;
+  color: var(--violeta-claro);
+}
+
+.numero-pendiente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  height: 56px;
+  padding: 0 8px;
+  border: 1px solid var(--violeta);
+  border-radius: 14px;
+  color: var(--beige);
+}
+
+.fin {
+  margin: 16px 0 0;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--texto-suave);
 }

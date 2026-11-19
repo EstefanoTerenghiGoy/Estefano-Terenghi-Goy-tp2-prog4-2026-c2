@@ -2,15 +2,16 @@ import { Component, ElementRef, computed, inject, input, output, signal, viewChi
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Comentario as ComentarioModelo } from '../../models/comentario';
-import { Iniciales } from '../../pipes/iniciales';
 import { TiempoRelativo } from '../../pipes/tiempo-relativo';
+import { aGlifos } from '../../utils/nomai';
 import { MAX_COMENTARIO, mensajeComentario } from '../../validators/validadores';
+import { MiniEspiral } from '../mini-espiral/mini-espiral';
 
-// Una transmisión (comentario). El mensaje va como texto normal; en el paso 7 se le suma la capa de
-// glifos sobre el mismo bloque del mensaje, sin tocar el resto.
+// Una transmisión (comentario). Cerrada se ve en glifos; al tocarla se traduce a su texto real. El
+// estado de traducción lo maneja la pantalla de detalle: este componente solo lo muestra y avisa.
 @Component({
   selector: 'app-comentario',
-  imports: [Iniciales, TiempoRelativo, ReactiveFormsModule],
+  imports: [TiempoRelativo, ReactiveFormsModule, MiniEspiral],
   templateUrl: './comentario.html',
   styleUrl: './comentario.css',
 })
@@ -19,8 +20,13 @@ export class Comentario {
   private fb = inject(FormBuilder);
 
   comentario = input.required<ComentarioModelo>();
+  numero = input.required<number>(); // #n cronológico: el más antiguo es #1
+  traducido = input(false);
+  seleccionado = input(false); // el último que se tocó: lleva el borde cian
   // El padre la prende mientras se guarda la edición: los botones quedan deshabilitados
   ocupado = input(false);
+
+  traducir = output<void>();
   // Mensaje nuevo (ya sin espacios a los lados). El padre hace el pedido y reemplaza el comentario
   editar = output<string>();
 
@@ -36,7 +42,11 @@ export class Comentario {
     return `${autor.nombre} ${autor.apellido}`;
   });
 
-  // Solo el autor del comentario ve "Editar" (tampoco los administradores)
+  // Los glifos se recalculan solos si el comentario se edita
+  glifosNombre = computed(() => aGlifos(this.nombreAutor()));
+  glifosMensaje = computed(() => aGlifos(this.comentario().mensaje));
+
+  // Solo el autor del comentario ve "Editar" y "VOS" (tampoco los administradores)
   esAutor = computed(() => this.authService.obtenerUsuario()?._id === this.comentario().autor._id);
 
   // Modo edición: se guarda sobre qué comentario se abrió. Cuando el padre lo reemplaza por el que

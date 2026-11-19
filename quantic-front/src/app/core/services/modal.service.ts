@@ -10,7 +10,7 @@ export class ModalService {
   private resolverConfirmacion: ((acepto: boolean) => void) | null = null;
 
   mostrarError(titulo: string, mensaje: string): void {
-    this.resolver(false); // por si había una confirmación abierta
+    this.resolver(false);
     this.tipo.set('error');
     this.titulo.set(titulo);
     this.mensaje.set(mensaje);

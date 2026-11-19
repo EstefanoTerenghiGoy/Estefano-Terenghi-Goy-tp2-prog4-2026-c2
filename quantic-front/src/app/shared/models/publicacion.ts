@@ -5,14 +5,14 @@ export interface AutorPublicacion {
   nombre: string;
   apellido: string;
   nombreUsuario: string;
-  imagenPerfil?: string; // opcional: puede no tener foto
+  imagenPerfil?: string;
 }
 
 export interface Publicacion {
   _id: string;
   titulo: string;
   descripcion: string;
-  imagenUrl?: string; // opcional: la publicación puede no tener imagen
+  imagenUrl?: string; 
   createdAt: string;
   autor: AutorPublicacion;
   cantidadMeGusta: number;
@@ -20,7 +20,6 @@ export interface Publicacion {
   cantidadComentarios: number;
 }
 
-// Respuesta de dar / quitar me gusta
 export interface EstadoMeGusta {
   cantidadMeGusta: number;
   meGustaMio: boolean;
@@ -28,7 +27,7 @@ export interface EstadoMeGusta {
 
 export interface RespuestaPublicaciones {
   datos: Publicacion[];
-  total: number; // cantidad total sin paginar
+  total: number; 
   offset: number;
   limit: number;
 }

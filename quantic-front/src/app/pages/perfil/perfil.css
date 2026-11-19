@@ -1,4 +1,3 @@
-/* Celular: una columna. Desde tablet: ficha a la izquierda y publicaciones a la derecha */
 .perfil {
   display: grid;
   gap: 24px;
@@ -34,7 +33,7 @@
 }
 
 .avatar {
-  position: relative; /* por encima del anillo */
+  position: relative; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,9 +105,8 @@ dd {
   overflow-wrap: anywhere;
 }
 
-/* Panel de últimas entradas */
 .entradas {
-  min-width: 0; /* deja que el contenido largo no ensanche la grilla */
+  min-width: 0; 
 }
 
 .titulo-entradas {

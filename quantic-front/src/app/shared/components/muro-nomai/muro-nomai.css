@@ -1,0 +1,140 @@
+:host {
+  display: block;
+}
+
+.muro {
+  padding: 20px;
+}
+
+.cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titulo {
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--violeta-claro);
+}
+
+.progreso {
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--beige);
+}
+
+.barra {
+  height: 3px;
+  margin: 12px 0 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--borde);
+}
+
+.relleno {
+  height: 100%;
+  background: var(--beige);
+  transition: width 0.4s ease-out;
+}
+
+.lienzo {
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background: var(--fondo);
+}
+
+.tesela {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.espiral {
+  cursor: pointer;
+  outline: none;
+}
+
+path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.area {
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+}
+
+.violeta {
+  stroke: var(--violeta);
+}
+
+.beige {
+  stroke: var(--beige);
+}
+
+.traductor {
+  fill: none;
+  stroke: var(--cian);
+  stroke-width: 1.8;
+}
+
+.inicio {
+  fill: var(--fondo);
+  stroke: var(--violeta);
+  stroke-width: 1.4;
+}
+
+.inicio.traducida {
+  stroke: var(--beige);
+}
+
+.numero {
+  fill: var(--violeta-claro);
+  font-family: var(--fuente-mono);
+  font-size: 10px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.numero.traducida {
+  fill: var(--beige);
+}
+
+/* Anillo de foco para el teclado */
+.foco {
+  fill: none;
+  stroke: var(--texto);
+  stroke-dasharray: 3 3;
+  opacity: 0;
+}
+
+.espiral:focus-visible .foco {
+  opacity: 1;
+}
+
+.ayuda {
+  margin: 12px 0 0;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .relleno {
+    transition: none;
+  }
+}

@@ -11,7 +11,7 @@ import { Publicacion } from '../../shared/components/publicacion/publicacion';
 import { Comentario as ComentarioModelo } from '../../shared/models/comentario';
 import { Publicacion as PublicacionModelo } from '../../shared/models/publicacion';
 
-const POR_TANDA = 5; // comentarios que se traen cada vez
+const POR_TANDA = 5;
 
 @Component({
   selector: 'app-publicacion-detalle',
@@ -30,22 +30,21 @@ export class PublicacionDetalle implements OnInit {
 
   publicacion = signal<PublicacionModelo | null>(null);
   cargando = signal(true);
-  noExiste = signal(false); // 404: no existe o está dada de baja
+  noExiste = signal(false); 
   conError = signal(false);
-  ocupada = signal(false); // me gusta o eliminar en curso
+  ocupada = signal(false); 
 
   comentarios = signal<ComentarioModelo[]>([]);
   totalComentarios = signal(0);
   cargandoComentarios = signal(true);
   cargandoMas = signal(false);
   errorComentarios = signal(false);
-  guardandoId = signal<string | null>(null); // comentario que se está guardando
+  guardandoId = signal<string | null>(null); 
 
   hayMas = computed(() => this.comentarios().length < this.totalComentarios());
 
   async ngOnInit(): Promise<void> {
     await this.cargarPublicacion();
-    // Si la publicación no existe, tampoco hay transmisiones para pedir
     if (this.publicacion()) {
       await this.cargarComentarios();
     }
@@ -68,7 +67,6 @@ export class PublicacionDetalle implements OnInit {
     }
   }
 
-  // Primera tanda de comentarios
   async cargarComentarios(): Promise<void> {
     this.cargandoComentarios.set(true);
     this.errorComentarios.set(false);
@@ -87,16 +85,12 @@ export class PublicacionDetalle implements OnInit {
     }
   }
 
-  // Trae los 5 siguientes y los agrega al final, sin quitar los que ya están
   async cargarMas(): Promise<void> {
     if (this.cargandoMas()) {
       return;
     }
     this.cargandoMas.set(true);
     try {
-      // El offset es la cantidad que ya tenemos en la lista. Como el back ordena de más reciente a
-      // más viejo, cada comentario nuevo que agregamos al principio corre en 1 a todos los demás
-      // en el back, y a la vez suma 1 a esta cantidad: así la frontera no se repite.
       const respuesta = await this.comentariosService.listar(this.id, {
         offset: this.comentarios().length,
         limit: POR_TANDA,
@@ -113,18 +107,15 @@ export class PublicacionDetalle implements OnInit {
     }
   }
 
-  // Lo usa el formulario de nueva transmisión: el comentario nuevo va primero, y se suma 1 al total
-  // y a la cantidad de comentarios de la publicación
   agregarComentario(comentario: ComentarioModelo): void {
     if (this.comentarios().some((c) => c._id === comentario._id)) {
-      return; // ya estaba en la lista
+      return;
     }
     this.comentarios.update((lista) => [comentario, ...lista]);
     this.totalComentarios.update((total) => total + 1);
     this.publicacion.update((p) => (p ? { ...p, cantidadComentarios: p.cantidadComentarios + 1 } : p));
   }
 
-  // Guarda la edición y reemplaza ese comentario por el que devolvió el back (modificado: true)
   async editarComentario(comentario: ComentarioModelo, mensaje: string): Promise<void> {
     if (this.guardandoId()) {
       return;
@@ -179,7 +170,7 @@ export class PublicacionDetalle implements OnInit {
 
   private mostrarError(titulo: string, error: unknown): void {
     if (esSesionVencida(error)) {
-      return; // el interceptor ya te mandó al login
+      return;
     }
     this.modalService.mostrarError(
       titulo,

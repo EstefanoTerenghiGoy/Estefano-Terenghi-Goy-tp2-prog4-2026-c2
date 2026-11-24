@@ -8,6 +8,13 @@ export const autenticadoGuard: CanActivateFn = () => {
   return authService.estaLogueado() ? true : router.createUrlTree(['/login']);
 };
 
+// Dashboard: solo administradores; el resto vuelve a publicaciones (el back igual valida el rol)
+export const adminGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  return authService.esAdmin() ? true : router.createUrlTree(['/publicaciones']);
+};
+
 export const invitadoGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);

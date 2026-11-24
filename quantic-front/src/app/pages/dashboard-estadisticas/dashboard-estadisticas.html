@@ -1,0 +1,55 @@
+<form class="tarjeta lapso" [formGroup]="form" (ngSubmit)="actualizar()" novalidate>
+  <div class="campo">
+    <label for="desde">Desde</label>
+    <input id="desde" type="date" class="input" formControlName="desde" [class.invalido]="form.hasError('lapsoInvalido')" />
+  </div>
+  <div class="campo">
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="date" class="input" formControlName="hasta" [class.invalido]="form.hasError('lapsoInvalido')" />
+  </div>
+  <button type="submit" class="boton" [disabled]="form.invalid || cargando()">Actualizar</button>
+  @if (form.hasError('lapsoInvalido')) {
+    <p class="error-campo" role="alert">"Desde" no puede ser posterior a "Hasta".</p>
+  }
+</form>
+
+@if (cargando()) {
+  <p class="estado" role="status">
+    <span class="rueda" aria-hidden="true"></span>
+    Cargando estadísticas…
+  </p>
+} @else if (conError()) {
+  <section class="tarjeta estado-tarjeta">
+    <p>No pudimos cargar las estadísticas.</p>
+    <button type="button" class="boton boton-secundario" (click)="actualizar()">Reintentar</button>
+  </section>
+} @else {
+  <div class="graficos">
+    <section class="tarjeta panel">
+      @if (porUsuario().length === 0) {
+        <p class="titulo-vacio">Publicaciones por usuario</p>
+        <p class="vacio">Sin datos en este lapso</p>
+      } @else {
+        <app-grafico tipo="pie" titulo="Publicaciones por usuario" [etiquetas]="etiquetasUsuarios()" [datos]="datosUsuarios()" />
+      }
+    </section>
+
+    <section class="tarjeta panel">
+      @if (comentarios().total === 0) {
+        <p class="titulo-vacio">{{ tituloDias() }}</p>
+        <p class="vacio">Sin datos en este lapso</p>
+      } @else {
+        <app-grafico tipo="line" [titulo]="tituloDias()" [etiquetas]="etiquetasDias()" [datos]="datosDias()" />
+      }
+    </section>
+
+    <section class="tarjeta panel ancho">
+      @if (porPublicacion().length === 0) {
+        <p class="titulo-vacio">Comentarios por publicación (top 10)</p>
+        <p class="vacio">Sin datos en este lapso</p>
+      } @else {
+        <app-grafico tipo="bar" titulo="Comentarios por publicación (top 10)" [etiquetas]="etiquetasPublicaciones()" [datos]="datosPublicaciones()" />
+      }
+    </section>
+  </div>
+}

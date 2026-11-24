@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { autenticadoGuard, invitadoGuard } from './core/guards/auth.guard';
+import { adminGuard, autenticadoGuard, invitadoGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   // Al abrir la app se pasa por la pantalla de cargando, que valida el token con el back
@@ -38,6 +38,27 @@ export const routes: Routes = [
       {
         path: 'perfil',
         loadComponent: () => import('./pages/perfil/perfil').then((m) => m.Perfil),
+      },
+      // Dashboard de administrador: un encabezado con sus dos secciones
+      {
+        path: 'dashboard',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
+        children: [
+          { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+          {
+            path: 'usuarios',
+            loadComponent: () =>
+              import('./pages/dashboard-usuarios/dashboard-usuarios').then((m) => m.DashboardUsuarios),
+          },
+          {
+            path: 'estadisticas',
+            loadComponent: () =>
+              import('./pages/dashboard-estadisticas/dashboard-estadisticas').then(
+                (m) => m.DashboardEstadisticas,
+              ),
+          },
+        ],
       },
     ],
   },

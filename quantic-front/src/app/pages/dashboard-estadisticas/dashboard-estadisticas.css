@@ -1,0 +1,101 @@
+.lapso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0 16px;
+  margin-bottom: 24px;
+  padding: 20px;
+}
+
+.lapso .campo {
+  margin-bottom: 0;
+}
+
+.lapso .error-campo {
+  flex-basis: 100%;
+  margin-top: 10px;
+}
+
+/* Celular: una columna. Escritorio: dos gráficos arriba y el de barras a lo ancho */
+.graficos {
+  display: grid;
+  gap: 20px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 20px;
+}
+
+.titulo-vacio {
+  margin: 0 0 14px;
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--violeta-claro);
+}
+
+.vacio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  margin: 0;
+  border: 1px dashed var(--borde);
+  border-radius: 14px;
+  color: var(--texto-suave);
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 40px 0;
+  font-family: var(--fuente-mono);
+  color: var(--texto-suave);
+}
+
+.rueda {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--borde);
+  border-top-color: var(--acento);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rueda {
+    animation-duration: 3s;
+  }
+}
+
+.estado-tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--texto-suave);
+}
+
+.estado-tarjeta p {
+  margin: 0;
+}
+
+@media (min-width: 800px) {
+  .graficos {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ancho {
+    grid-column: 1 / -1;
+  }
+}

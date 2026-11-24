@@ -217,7 +217,12 @@
   }
 }
 
-@media (max-width: 480px) {
+/* Con dos pestañas (administrador) el texto no entra en pantallas chicas: quedan solo los íconos */
+@media (max-width: 720px) {
+  .pestana {
+    padding: 0 14px;
+  }
+
   .pestana-texto {
     display: none;
   }

@@ -1,0 +1,107 @@
+<form class="tarjeta tarjeta-acento formulario" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+  <p class="etiqueta">Nuevo usuario</p>
+
+  <fieldset class="perfil">
+    <legend>Perfil</legend>
+    <label class="opcion"><input type="radio" formControlName="perfil" value="usuario" /> Usuario</label>
+    <label class="opcion"><input type="radio" formControlName="perfil" value="administrador" /> Administrador</label>
+  </fieldset>
+
+  <div class="fila">
+    <div class="campo">
+      <label for="nu-nombre">Nombre</label>
+      <input id="nu-nombre" class="input" formControlName="nombre" [class.invalido]="invalido('nombre')" />
+      @if (invalido('nombre')) { <p class="error-campo">Ingresá el nombre.</p> }
+    </div>
+    <div class="campo">
+      <label for="nu-apellido">Apellido</label>
+      <input id="nu-apellido" class="input" formControlName="apellido" [class.invalido]="invalido('apellido')" />
+      @if (invalido('apellido')) { <p class="error-campo">Ingresá el apellido.</p> }
+    </div>
+  </div>
+
+  <div class="fila">
+    <div class="campo">
+      <label for="nu-correo">Correo</label>
+      <input id="nu-correo" type="email" class="input" formControlName="correo" [class.invalido]="invalido('correo')" />
+      @if (invalido('correo')) {
+        <p class="error-campo">
+          {{ form.controls.correo.hasError('required') ? 'Ingresá el correo.' : 'El correo no tiene un formato válido.' }}
+        </p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-usuario">Nombre de usuario</label>
+      <input id="nu-usuario" class="input" formControlName="nombreUsuario" [class.invalido]="invalido('nombreUsuario')" />
+      @if (invalido('nombreUsuario')) { <p class="error-campo">Elegí un nombre de usuario.</p> }
+    </div>
+  </div>
+
+  <div class="fila">
+    <div class="campo">
+      <label for="nu-password">Contraseña</label>
+      <div class="input-password">
+        <input id="nu-password" [type]="verPassword() ? 'text' : 'password'" class="input" formControlName="password" autocomplete="new-password" [class.invalido]="invalido('password')" />
+        <app-boton-ojo [visible]="verPassword()" (alternar)="verPassword.set(!verPassword())" />
+      </div>
+      <p [class]="invalido('password') ? 'error-campo' : 'ayuda'">Mínimo 8 caracteres, una mayúscula y un número.</p>
+    </div>
+    <div class="campo">
+      <label for="nu-repetir">Repetir contraseña</label>
+      <input id="nu-repetir" [type]="verPassword() ? 'text' : 'password'" class="input" formControlName="repetirPassword" autocomplete="new-password" [class.invalido]="repetirInvalido()" />
+      @if (repetirInvalido()) {
+        <p class="error-campo">
+          {{ form.controls.repetirPassword.hasError('required') ? 'Repetí la contraseña.' : 'Las contraseñas no coinciden.' }}
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="fila">
+    <div class="campo">
+      <label for="nu-fecha">Fecha de nacimiento</label>
+      <input id="nu-fecha" type="date" class="input" formControlName="fechaNacimiento" [max]="hoy" [class.invalido]="invalido('fechaNacimiento')" />
+      @if (invalido('fechaNacimiento')) {
+        <p class="error-campo">
+          {{ form.controls.fechaNacimiento.hasError('required') ? 'Ingresá la fecha de nacimiento.' : 'La fecha no puede ser futura.' }}
+        </p>
+      }
+    </div>
+    <div class="campo">
+      <label for="nu-imagen">Imagen de perfil (opcional)</label>
+      <div class="imagen">
+        @if (vistaPrevia()) {
+          <img [src]="vistaPrevia()" alt="Vista previa de la imagen de perfil" />
+        }
+        <input id="nu-imagen" type="file" accept="image/*" (change)="elegirImagen($event)" />
+      </div>
+      @if (errorImagen()) {
+        <p class="error-campo" role="alert">{{ errorImagen() }}</p>
+      } @else {
+        <p class="ayuda">Solo imágenes. Máximo 5 MB.</p>
+      }
+    </div>
+  </div>
+
+  <div class="campo">
+    <label for="nu-descripcion">Descripción breve</label>
+    <textarea id="nu-descripcion" rows="3" class="input" formControlName="descripcion" [class.invalido]="invalido('descripcion')"></textarea>
+    <div class="pie-descripcion">
+      @if (invalido('descripcion')) {
+        <p class="error-campo">
+          {{ form.controls.descripcion.hasError('required') ? 'Escribí una descripción.' : 'Máximo 300 caracteres.' }}
+        </p>
+      }
+      <span class="contador" [class.excedido]="form.controls.descripcion.value.length > 300">
+        {{ form.controls.descripcion.value.length }} / 300
+      </span>
+    </div>
+  </div>
+
+  <div class="acciones">
+    <button type="button" class="boton boton-secundario" (click)="cancelar.emit()">Cancelar</button>
+    <button type="submit" class="boton" [disabled]="enviando()">
+      {{ enviando() ? 'Creando…' : 'Crear usuario' }}
+    </button>
+  </div>
+</form>

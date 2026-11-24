@@ -21,20 +21,33 @@
       <p class="usuario">&#64;{{ u.nombreUsuario }}</p>
       <span class="insignia">{{ insignia() }}</span>
 
-      <dl class="datos">
-        <div>
-          <dt>Correo</dt>
-          <dd>{{ u.correo }}</dd>
-        </div>
-        <div>
-          <dt>Fecha de nacimiento</dt>
-          <dd>{{ u.fechaNacimiento | fechaLarga }}</dd>
-        </div>
-        <div>
-          <dt>Descripción</dt>
-          <dd>{{ u.descripcion }}</dd>
-        </div>
-      </dl>
+      @if (editando()) {
+        <app-editar-perfil
+          class="edicion"
+          [usuario]="u"
+          (guardado)="editando.set(false)"
+          (cancelar)="editando.set(false)"
+        />
+      } @else {
+        <dl class="datos">
+          <div>
+            <dt>Correo</dt>
+            <dd>{{ u.correo }}</dd>
+          </div>
+          <div>
+            <dt>Fecha de nacimiento</dt>
+            <dd>{{ u.fechaNacimiento | fechaLarga }}</dd>
+          </div>
+          <div>
+            <dt>Descripción</dt>
+            <dd>{{ u.descripcion }}</dd>
+          </div>
+        </dl>
+
+        <button type="button" class="boton boton-secundario boton-bloque editar" (click)="editando.set(true)">
+          Editar perfil
+        </button>
+      }
     </section>
 
     <section class="entradas" aria-labelledby="titulo-entradas">

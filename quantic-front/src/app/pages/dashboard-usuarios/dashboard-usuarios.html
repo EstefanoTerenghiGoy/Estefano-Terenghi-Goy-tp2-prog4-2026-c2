@@ -1,0 +1,82 @@
+<div class="encabezado">
+  <h2 class="subtitulo-panel">Usuarios</h2>
+  @if (!creando()) {
+    <button type="button" class="boton" (click)="creando.set(true)">+ Nuevo usuario</button>
+  }
+</div>
+
+@if (creando()) {
+  <app-nuevo-usuario class="nuevo" (creado)="alCrear()" (cancelar)="creando.set(false)" />
+}
+
+@if (cargando()) {
+  <p class="estado" role="status">
+    <span class="rueda" aria-hidden="true"></span>
+    Cargando usuarios…
+  </p>
+} @else if (conError()) {
+  <section class="tarjeta estado-tarjeta">
+    <p>No pudimos cargar los usuarios.</p>
+    <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+  </section>
+} @else {
+  <!-- En celular cada fila se apila como una tarjeta (ver CSS) -->
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th scope="col">Usuario</th>
+        <th scope="col">Correo</th>
+        <th scope="col">Perfil</th>
+        <th scope="col">Estado</th>
+        <th scope="col"><span class="oculto">Acciones</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (u of usuarios(); track u._id) {
+        <tr [class.inactivo]="!u.activo">
+          <td class="quien">
+            <span class="avatar">
+              @if (u.imagenPerfil) {
+                <img [src]="u.imagenPerfil" alt="" />
+              } @else {
+                {{ u.nombre + ' ' + u.apellido | iniciales }}
+              }
+            </span>
+            <span class="nombres">
+              <strong>{{ u.nombre }} {{ u.apellido }}</strong>
+              <span class="arroba">&#64;{{ u.nombreUsuario }}</span>
+            </span>
+          </td>
+          <td class="correo" data-etiqueta="Correo">{{ u.correo }}</td>
+          <td data-etiqueta="Perfil">
+            <span class="insignia" [class.admin]="u.perfil === 'administrador'">
+              {{ u.perfil === 'administrador' ? 'ADMIN' : 'USUARIO' }}
+            </span>
+          </td>
+          <td data-etiqueta="Estado">
+            <span class="estado-usuario" [class.activo]="u.activo">
+              {{ u.activo ? 'Habilitado' : 'Deshabilitado' }}
+            </span>
+          </td>
+          <td class="accion">
+            @if (u._id === idPropio) {
+              <span class="vos">VOS</span>
+            } @else {
+              <button
+                type="button"
+                class="boton chico"
+                [class.boton-secundario]="!u.activo"
+                [class.peligro]="u.activo"
+                [disabled]="ocupadoId() === u._id"
+                [attr.aria-label]="(u.activo ? 'Deshabilitar a ' : 'Habilitar a ') + u.nombreUsuario"
+                (click)="cambiarEstado(u)"
+              >
+                {{ u.activo ? 'Deshabilitar' : 'Habilitar' }}
+              </button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

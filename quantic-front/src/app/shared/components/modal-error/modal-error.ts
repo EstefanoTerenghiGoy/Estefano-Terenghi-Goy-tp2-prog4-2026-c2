@@ -19,6 +19,8 @@ export class ModalError implements AfterViewInit {
   // "error": un solo botón "Entendido". "confirmacion": botones "Cancelar" y "Eliminar".
   // "aviso": reloj naranja y botones "Extender el loop" (emite confirmar) y "Ahora no" (emite cerrar)
   tipo = input<'error' | 'confirmacion' | 'aviso'>('error');
+  textoConfirmar = input('Eliminar'); // texto del botón principal de la confirmación
+  peligro = input(true); // rojo si la acción es destructiva
   ocupado = input(false); // deshabilita el botón principal mientras hay un pedido en curso
   cerrar = output<void>();
   confirmar = output<void>();

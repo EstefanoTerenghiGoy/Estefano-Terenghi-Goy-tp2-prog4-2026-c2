@@ -26,8 +26,8 @@
         <button #botonCerrar type="button" class="boton boton-secundario" (click)="cerrar.emit()">
           Cancelar
         </button>
-        <button type="button" class="boton boton-peligro" (click)="confirmar.emit()">
-          Eliminar
+        <button type="button" class="boton" [class.boton-peligro]="peligro()" (click)="confirmar.emit()">
+          {{ textoConfirmar() }}
         </button>
       </div>
     } @else if (tipo() === 'aviso') {

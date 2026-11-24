@@ -5,6 +5,7 @@ import { ComentariosService } from '../../core/services/comentarios.service';
 import { ModalService } from '../../core/services/modal.service';
 import { PublicacionesService } from '../../core/services/publicaciones.service';
 import { esSesionVencida, mensajeDeError } from '../../core/utils/mensaje-error';
+import { EditarPerfil } from '../../shared/components/editar-perfil/editar-perfil';
 import { RespuestaComentarios } from '../../shared/models/comentario';
 import { Publicacion } from '../../shared/models/publicacion';
 import { FechaLarga } from '../../shared/pipes/fecha-larga';
@@ -21,7 +22,7 @@ const CANTIDAD_COMENTARIOS = 3;
 
 @Component({
   selector: 'app-perfil',
-  imports: [RouterLink, Iniciales, FechaLarga, TiempoRelativo],
+  imports: [RouterLink, Iniciales, FechaLarga, TiempoRelativo, EditarPerfil],
   templateUrl: './perfil.html',
   styleUrl: './perfil.css',
 })
@@ -31,7 +32,9 @@ export class Perfil implements OnInit {
   private comentariosService = inject(ComentariosService);
   private modalService = inject(ModalService);
 
-  usuario = signal(this.authService.obtenerUsuario());
+  // Signal del AuthService: al guardar la edición, la ficha se actualiza sola
+  usuario = this.authService.usuario;
+  editando = signal(false);
 
   entradas = signal<EntradaPerfil[]>([]);
   cargando = signal(true);

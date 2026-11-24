@@ -20,6 +20,15 @@
       </svg>
       <span class="pestana-texto">PUBLICACIONES</span>
     </a>
+    <!-- Solo administradores: lleva al dashboard, que tiene Usuarios y Estadísticas -->
+    @if (esAdmin()) {
+      <a class="pestana" routerLink="/dashboard" routerLinkActive="activa" aria-label="Dashboard: usuarios y estadísticas">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+        </svg>
+        <span class="pestana-texto">DASHBOARD</span>
+      </a>
+    }
   </nav>
 
   <div class="usuario" (clickOutside)="cerrarMenu()">

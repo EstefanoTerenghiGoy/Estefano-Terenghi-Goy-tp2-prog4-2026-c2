@@ -17,7 +17,9 @@ export class Navbar {
   private router = inject(Router);
   loop = inject(LoopService);
 
-  usuario = signal(this.authService.obtenerUsuario());
+  // Signal del AuthService: si el usuario edita su perfil, la burbuja se actualiza sola
+  usuario = this.authService.usuario;
+  esAdmin = this.authService.esAdmin;
   menuAbierto = signal(false);
 
   // Para las iniciales de la burbuja cuando el usuario no tiene imagen

@@ -4,6 +4,8 @@ import { PublicacionesService } from './publicaciones.service.js';
 import { PublicacionesController } from './publicaciones.controller.js';
 import { ComentariosService } from './comentarios.service.js';
 import { ComentariosController } from './comentarios.controller.js';
+import { EstadisticasService } from './estadisticas.service.js';
+import { EstadisticasController } from './estadisticas.controller.js';
 import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema.js';
 import { Comentario, ComentarioSchema } from './schemas/comentario.schema.js';
 import { Usuario, UsuarioSchema } from '../usuarios/schemas/usuario.schema.js';
@@ -18,7 +20,7 @@ import { CloudinaryModule } from '../common/cloudinary/cloudinary.module.js';
       { name: Usuario.name, schema: UsuarioSchema },
     ]),
   ],
-  controllers: [PublicacionesController, ComentariosController],
-  providers: [PublicacionesService, ComentariosService],
+  controllers: [PublicacionesController, ComentariosController, EstadisticasController],
+  providers: [PublicacionesService, ComentariosService, EstadisticasService],
 })
 export class PublicacionesModule {}
